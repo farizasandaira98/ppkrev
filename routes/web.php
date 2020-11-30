@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+//Route admin
+Route::get('/admin', 'AdminController@index');
+
+//Route anggota
+Route::get('/anggota', 'AnggotaController@index');
+Route::get('/anggota/tambah', 'AnggotaController@tambah');
+Route::post('/anggota/store', 'AnggotaController@store');
+Route::get('/anggota/edit/{id}', 'AnggotaController@edit');
+Route::post('/anggota/update/{id}', 'AnggotaController@update');
+Route::get('/anggota/hapus/{id}', 'AnggotaController@destroy');
