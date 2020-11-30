@@ -29,6 +29,9 @@ Route::get('/anggota/edit/{id}', 'AnggotaController@edit');
 Route::post('/anggota/update/{id}', 'AnggotaController@update');
 Route::get('/anggota/hapus/{id}', 'AnggotaController@destroy');
 
+//Route infokeg
+Route::get('/infokeg', 'InfokegController@index');
+
 //Route Login
 Route::get('/', 'AuthController@showFormLogin')->name('login');
 Route::get('login', 'AuthController@showFormLogin')->name('login');

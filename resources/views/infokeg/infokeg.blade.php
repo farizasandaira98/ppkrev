@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Data Anggota PKK</title>
+  <title>Data Kegiatan PKK</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -125,7 +125,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Data Anggota</h1>
+              <h1 class="m-0">Data Kegiatan</h1>
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -134,26 +134,22 @@
       <div class="container">
         <div class="card mt-5">
           <div class="card-body">
-            <a href="/anggota/tambah" class="btn btn-primary">Input Anggota Baru</a>
+            <a href="/anggota/tambah" class="btn btn-primary">Input Kegiatan Baru</a>
             <br/>
             <br/>
             <table class="table table-bordered table-hover table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Nomor Anggota</th>
-                  <th>Nama Anggota</th>
-                  <th>Jenis Kelamin</th>
-                  <th>Alamat</th>
-                  <th>Email</th>
-                  <th>No HP</th>
-                  <th>Status Keanggotaan</th>
-                  <th>Foto</th>
+                  <th>Nama Kegiatan</th>
+                  <th>Tanggal kegiatan</th>
+                  <th>Tempat Kegiatan</th>
+                  <th>Foto Kegiatan</th>
                   <th>OPSI</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach($anggota as $ang)
+                @foreach($infokeg as $ang)
                 <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $ang->id_anggota }}</td>

@@ -49,7 +49,6 @@
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary btn-block">Register</button>
-                    <p class="text-center">Sudah punya akun? <a href="{{ route('login') }}">Login</a> sekarang!</p>
                 </div>
                 </form>
             </div>
