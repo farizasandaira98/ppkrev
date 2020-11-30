@@ -101,7 +101,7 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
+        $this->validate($request,[  
             'id_anggota' => 'required',
             'nama_anggota' => 'required',
             'jenis_kelamin' => 'required',

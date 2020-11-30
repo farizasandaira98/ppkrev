@@ -28,3 +28,17 @@ Route::post('/anggota/store', 'AnggotaController@store');
 Route::get('/anggota/edit/{id}', 'AnggotaController@edit');
 Route::post('/anggota/update/{id}', 'AnggotaController@update');
 Route::get('/anggota/hapus/{id}', 'AnggotaController@destroy');
+
+//Route Login
+Route::get('/', 'AuthController@showFormLogin')->name('login');
+Route::get('login', 'AuthController@showFormLogin')->name('login');
+Route::post('login', 'AuthController@login');
+Route::get('register', 'AuthController@showFormRegister')->name('register');
+Route::post('register', 'AuthController@register');
+ 
+Route::group(['middleware' => 'auth'], function () {
+ 
+    Route::get('admin', 'AdminController@index')->name('admin');
+    Route::get('logout', 'AuthController@logout')->name('logout');
+ 
+});
