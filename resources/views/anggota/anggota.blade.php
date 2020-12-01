@@ -88,6 +88,14 @@
               </a>
             </li>
             <li class="nav-item">
+            <a href="/anggota" class="nav-link">
+              <p>
+                Data Anggota
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+          </li>
+            <li class="nav-item">
             <a href="/infokeg" class="nav-link">
               <p>
                 Data Kegiatan

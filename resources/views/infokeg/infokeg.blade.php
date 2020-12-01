@@ -88,6 +88,14 @@
               </a>
             </li>
             <li class="nav-item">
+            <a href="/anggota" class="nav-link">
+              <p>
+                Data Anggota
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+          </li>
+            <li class="nav-item">
             <a href="/infokeg" class="nav-link">
               <p>
                 Data Kegiatan
@@ -155,7 +163,10 @@
                   <td>{{ $ang->nama_kegiatan }}</td>
                   <td>{{ $ang->tanggal_kegiatan }}</td>
                   <td>{{ $ang->tempat_kegiatan }}</td>
-                  <td><img src='data_file/{{ $ang->foto_kegiatan }}' style='width:80px; height:120px;'></td>
+                  <td><?php foreach (json_decode($ang->foto_kegiatan)as $gambar){ ?>
+                    <img src='data_file/{{ $gambar }}' style='width:80px; height:120px;'/>
+                    <?php } ?>
+                  </td>
                   <td>
                     <a href="/infokeg/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
                     <a href="/infokeg/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>

@@ -43,17 +43,23 @@ class InfoKegController extends Controller
             'foto_kegiatan' => 'required'
         ]);
 
-        $file = $request->file('foto_kegiatan');
-        $ekstensi = $request->file('foto_kegiatan')->getClientOriginalExtension();
-        $tujuan_upload = 'data_file';
-        $namafoto = $request->id_anggota.".".$ekstensi;
-        $file->move($tujuan_upload,$namafoto);
+        foreach ($request->file('foto_kegiatan') as $image) {
+            $namafile = $image->getClientOriginalName();
+            $namaasli = pathinfo($namafile, PATHINFO_FILENAME);
+            $ekstensi = $image->getClientOriginalExtension();
+            $tujuan_upload = 'data_file';
+            $namafoto = $namaasli."_".$request->nama_kegiatan.".".$ekstensi;
+            $image->move($tujuan_upload,$namafoto);
+            $data[] = $namafoto;
+        }
 
-        Anggota::create([
+        
+
+        Infokeg::create([
             'nama_kegiatan' => $request->nama_kegiatan,
             'tanggal_kegiatan' => $request->tanggal_kegiatan,
             'tempat_kegiatan' => $request->tempat_kegiatan,
-            'foto_kegiatan' => $namafoto
+            'foto_kegiatan' => $namafoto = json_encode($data)
         ]);
         return redirect('infokeg')->with('msg', 'Data Telah Tersimpan');
     }
@@ -100,6 +106,12 @@ class InfoKegController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+     $infokeg = Infokeg::where('id', $id)->first();
+     $image[] = array($infokeg->foto_kegiatan);
+     foreach ($image as $image) {
+        unlink(public_path("data_file/".json_decode($image)));
+     }
+     $infokeg->delete();
+     return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
+ }
 }

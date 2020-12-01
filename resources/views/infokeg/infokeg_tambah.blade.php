@@ -1,153 +1,95 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
-    <title>Tambah Data Kegiatan</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+  <<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>Tambah Data Kegiatan</title>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".btn-success").click(function(){ 
+          var html = $(".clone").html();
+          $(".increment").after(html);
+      });
+      $("body").on("click",".btn-danger",function(){ 
+          $(this).parents(".control-group").remove();
+      });
+    });
+</script>
+
 </head>
 <body>
-    <div class="container">
-        <div class="card mt-5">
-            <div class="card-header text-center">
-                Data Kegiatan PKK - <strong>TAMBAH DATA</strong>
+  <div class="container">
+    <div class="card mt-5">
+      <div class="card-header text-center">
+        Data Kegiatan PKK - <strong>TAMBAH DATA</strong>
+      </div>
+      <div class="card-body">
+        <a href="/anggota" class="btn btn-primary">Kembali</a>
+        <br/>
+        <br/>
+
+        <form method="post" action="/infokeg/store" enctype="multipart/form-data">
+
+          {{ csrf_field() }}
+
+          <div class="form-group">
+            <label>Nama Kegiatan</label>
+            <input type="text" name="nama_kegiatan" class="form-control" placeholder="Nama Kegiatan ..">
+
+            @if($errors->has('nama_kegiatan'))
+            <div class="text-danger">
+              {{ $errors->first('nama_kegiatan')}}
             </div>
-            <div class="card-body">
-                <a href="/anggota" class="btn btn-primary">Kembali</a>
-                <br/>
-                <br/>
+            @endif
 
-                <form method="post" action="/anggota/store" enctype="multipart/form-data">
+          </div>
 
-                    {{ csrf_field() }}
+          <div class="form-group">
+            <label>Tanggal Kegiatan</label>
+            <input type ="date" placeholder="Tanggal Kegiatan" type="text" class="form-control datepicker" name="tanggal_kegiatan">
 
-                    <div class="form-group">
-                        <label>Nomor Anggota</label>
-                        <input type="text" name="id_anggota" class="form-control" placeholder="Nomor Keanggotaan ..">
-
-                        @if($errors->has('id_anggota'))
-                        <div class="text-danger">
-                            {{ $errors->first('id_anggota')}}
-                        </div>
-                        @endif
-
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nama Anggota</label>
-                        <input type="text" name="nama_anggota" class="form-control" placeholder="Nama Anggota ..">
-
-                        @if($errors->has('nama_anggota'))
-                        <div class="text-danger">
-                            {{ $errors->first('nama_anggota')}}
-                        </div>
-                        @endif
-
-                    </div>
-
-                    <div class="form-group">
-                        <label>Jenis Kelamin</label>
-
-                        <select class="form-control" id="jenis_kelamin" 
-
-
-                        name="jenis_kelamin">
-
-
-                        <option value="Laki-laki">Laki-laki</option>
-
-
-                        <option value="Perempuan">Perempuan</option>
-
-
-                    </select>
-
-                    @if($errors->has('jenis_kelamin'))
-                    <div class="text-danger">
-                        {{ $errors->first('jenis_kelamin')}}
-                    </div>
-                    @endif
-
-                </div>
-
-                <div class="form-group">
-                    <label>Alamat</label>
-                    <textarea name="alamat" class="form-control" placeholder="Alamat anggota .."></textarea>
-
-                    @if($errors->has('alamat'))
-                    <div class="text-danger">
-                        {{ $errors->first('alamat')}}
-                    </div>
-                    @endif
-
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="Email Anggota ..">
-
-                    @if($errors->has('email'))
-                    <div class="text-danger">
-                        {{ $errors->first('email')}}
-                    </div>
-                    @endif
-
-                </div>
-
-                <div class="form-group">
-                    <label>No Telpon</label>
-                    <input type="tel" name="no_telp" class="form-control" placeholder="Nomor Telpon Anggota Anggota ..">
-
-                    @if($errors->has('no_telp'))
-                    <div class="text-danger">
-                        {{ $errors->first('no_telp')}}
-                    </div>
-                    @endif
-
-                </div>
-
-                <div class="form-group">
-                    <label>Status Anggota</label>
-
-                    <select class="form-control" id="status_anggota" name="status_anggota">
-
-
-                    <option value="aktif">Aktif</option>
-
-
-                    <option value="nonaktif">Non Aktif</option>
-
-
-                </select>
-
-                @if($errors->has('status_anggota'))
-                <div class="text-danger">
-                    {{ $errors->first('status_anggota')}}
-                </div>
-                @endif
-
+            @if($errors->has('tanggal_kegiatan'))
+            <div class="text-danger">
+              {{ $errors->first('tanggal_kegiatan')}}
             </div>
+            @endif
 
-            <div class="form-group">
-                <label>Foto Anggota</label>
-                <input type="file" name="foto" class="form-control">
+          </div>
 
-                @if($errors->has('foto'))
-                <div class="text-danger">
-                    {{ $errors->first('foto')}}
-                </div>
-                @endif
+        <div class="form-group">
+          <label>Tempat Kegiatan</label>
+          <textarea name="tempat_kegiatan" class="form-control" placeholder="Tempat Kegiatan .."></textarea>
 
+          @if($errors->has('tempat_kegiatan'))
+          <div class="text-danger">
+            {{ $errors->first('tempat_kegiatan')}}
+          </div>
+          @endif
+
+        </div>
+        <div class="input-group control-group increment" >
+          <input type="file" name="foto_kegiatan[]" class="form-control">
+          <div class="input-group-btn"> 
+            <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
+          </div>
+        </div>
+        <div class="clone hide">
+          <div class="control-group input-group" style="margin-top:10px">
+            <input type="file" name="foto_kegiatan[]" class="form-control">
+            <div class="input-group-btn"> 
+              <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
             </div>
-
-            <div class="form-group">
-                <input type="submit" class="btn btn-success" value="Simpan">
-            </div>
-
-        </form>
-
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary" style="margin-top:12px" value="Simpan">
+        </div>
+      </form>
     </div>
-</div>
+  </div>
 </div>
 </body>
 </html>
