@@ -23,9 +23,9 @@ class InfoKegController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function tambah()
     {
-        //
+        return view('infokeg/infokeg_tambah');
     }
 
     /**
@@ -36,7 +36,26 @@ class InfoKegController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'nama_kegiatan' => 'required',
+            'tanggal_kegiatan' => 'required',
+            'tempat_kegiatan' => 'required',
+            'foto_kegiatan' => 'required'
+        ]);
+
+        $file = $request->file('foto_kegiatan');
+        $ekstensi = $request->file('foto_kegiatan')->getClientOriginalExtension();
+        $tujuan_upload = 'data_file';
+        $namafoto = $request->id_anggota.".".$ekstensi;
+        $file->move($tujuan_upload,$namafoto);
+
+        Anggota::create([
+            'nama_kegiatan' => $request->nama_kegiatan,
+            'tanggal_kegiatan' => $request->tanggal_kegiatan,
+            'tempat_kegiatan' => $request->tempat_kegiatan,
+            'foto_kegiatan' => $namafoto
+        ]);
+        return redirect('infokeg')->with('msg', 'Data Telah Tersimpan');
     }
 
     /**

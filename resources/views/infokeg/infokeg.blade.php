@@ -134,7 +134,7 @@
       <div class="container">
         <div class="card mt-5">
           <div class="card-body">
-            <a href="/anggota/tambah" class="btn btn-primary">Input Kegiatan Baru</a>
+            <a href="/infokeg/tambah" class="btn btn-primary">Input Kegiatan Baru</a>
             <br/>
             <br/>
             <table class="table table-bordered table-hover table-striped">
@@ -152,17 +152,13 @@
                 @foreach($infokeg as $ang)
                 <tr>
                   <td>{{ $loop->iteration }}</td>
-                  <td>{{ $ang->id_anggota }}</td>
-                  <td>{{ $ang->nama_anggota }}</td>
-                  <td>{{ $ang->jenis_kelamin }}</td>
-                  <td>{{ $ang->alamat }}</td>
-                  <td>{{ $ang->email }}</td>
-                  <td>{{ $ang->no_telp }}</td>
-                  <td>{{ $ang->status_anggota }}</td>
-                  <td><img src='data_file/{{ $ang->foto }}' style='width:80px; height:120px;'></td>
+                  <td>{{ $ang->nama_kegiatan }}</td>
+                  <td>{{ $ang->tanggal_kegiatan }}</td>
+                  <td>{{ $ang->tempat_kegiatan }}</td>
+                  <td><img src='data_file/{{ $ang->foto_kegiatan }}' style='width:80px; height:120px;'></td>
                   <td>
-                    <a href="/anggota/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
-                    <a href="/anggota/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
+                    <a href="/infokeg/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
+                    <a href="/infokeg/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
                   </td>
                 </tr>
                 @endforeach

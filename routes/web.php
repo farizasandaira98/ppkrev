@@ -31,6 +31,11 @@ Route::get('/anggota/hapus/{id}', 'AnggotaController@destroy');
 
 //Route infokeg
 Route::get('/infokeg', 'InfokegController@index');
+Route::get('/infokeg/tambah', 'InfokegController@tambah');
+Route::post('/infokeg/store', 'InfokegController@store');
+Route::get('/infokeg/edit/{id}', 'InfokegController@edit');
+Route::post('/infokeg/update/{id}', 'InfokegController@update');
+Route::get('/infokeg/hapus/{id}', 'InfokegController@destroy');
 
 //Route Login
 Route::get('/', 'AuthController@showFormLogin')->name('login');
