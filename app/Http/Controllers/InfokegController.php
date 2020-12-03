@@ -39,6 +39,7 @@ class InfoKegController extends Controller
     {
         $this->validate($request,[
             'nama_kegiatan' => 'required',
+            'deskripsi' => 'required',
             'tanggal_kegiatan' => 'required',
             'tempat_kegiatan' => 'required',
             'foto_kegiatan' => 'required'
@@ -58,6 +59,7 @@ class InfoKegController extends Controller
 
         Infokeg::create([
             'nama_kegiatan' => $request->nama_kegiatan,
+            'deskripsi' => $request->deskripsi,
             'tanggal_kegiatan' => $request->tanggal_kegiatan,
             'tempat_kegiatan' => $request->tempat_kegiatan,
             'foto_kegiatan' => $namafoto = json_encode($data)
@@ -97,8 +99,9 @@ class InfoKegController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
+         $this->validate($request,[
             'nama_kegiatan' => 'required',
+            'deskripsi' => 'required',
             'tanggal_kegiatan' => 'required',
             'tempat_kegiatan' => 'required',
             'foto_kegiatan' => 'required'
@@ -122,6 +125,7 @@ class InfoKegController extends Controller
     }
 
     $infokeg->nama_kegiatan = $request->nama_kegiatan;
+    $infokeg->deskripsi = $request->deskripsi;
     $infokeg->tanggal_kegiatan = $request->tanggal_kegiatan;
     $infokeg->tempat_kegiatan = $request->tempat_kegiatan;
     $infokeg->foto_kegiatan = $namafoto = json_encode($data);

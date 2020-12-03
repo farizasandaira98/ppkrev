@@ -168,8 +168,8 @@
                     <?php } ?>
                   </td>
                   <td>
-                    <a href="/pengunguman/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
-                    <a href="/pengunguman/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
+                    <a href="/pengumuman/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
+                    <a href="/pengumuman/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
                   </td>
                 </tr>
                 @endforeach

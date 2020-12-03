@@ -24,8 +24,8 @@ class PengumumanController extends Controller
      */
     public function tambah()
     {
-       return view('pengumuman/pengumuman_tambah');
-   }
+     return view('pengumuman/pengumuman_tambah');
+ }
 
     /**
      * Store a newly created resource in storage.
@@ -82,7 +82,8 @@ class PengumumanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pengumuman = Pengumuman::where('id', $id)->first();
+        return view('pengumuman/pengumuman_edit', ['pengumuman' => $pengumuman]);
     }
 
     /**
@@ -94,8 +95,37 @@ class PengumumanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'judul_pengumuman' => 'required',
+            'konten_pengumuman' => 'required',
+            'tanggal_pengumuman' => 'required',
+            'tambahan' => 'required'
+        ]);
+
+        $pengumuman = Pengumuman::where('id', $id)->first();
+        $image = json_decode($pengumuman->tambahan);
+        $length = count($image);
+        for ($i = 0; $i < $length; $i++) {
+           unlink(public_path("data_file/".$image[$i]));
+       }
+
+       foreach ($request->file('tambahan') as $image) {
+        $namafile = $image->getClientOriginalName();
+        $namaasli = pathinfo($namafile, PATHINFO_FILENAME);
+        $ekstensi = $image->getClientOriginalExtension();
+        $tujuan_upload = 'data_file';
+        $namafoto = $namaasli."_".$request->judul_pengumuman.".".$ekstensi;
+        $image->move($tujuan_upload,$namafoto);
+        $data[] = $namafoto;
     }
+
+    $pengumuman->judul_pengumuman = $request->judul_pengumuman;
+    $pengumuman->konten_pengumuman = $request->konten_pengumuman;
+    $pengumuman->tanggal_pengumuman = $request->tanggal_pengumuman;
+    $pengumuman->tambahan = $namafoto = json_encode($data);
+    $pengumuman->save();
+    return redirect('pengumuman')->with('msg', 'Data Telah Teredit');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -109,9 +139,9 @@ class PengumumanController extends Controller
         $image = json_decode($pengumuman->tambahan);
         $length = count($image);
         for ($i = 0; $i < $length; $i++) {
-           unlink(public_path("data_file/".$image[$i]));
-       }
-       $pengumuman->delete();
-       return redirect('pengumuman')->with('msg', 'Data Telah Terhapus');
-   }
+         unlink(public_path("data_file/".$image[$i]));
+     }
+     $pengumuman->delete();
+     return redirect('pengumuman')->with('msg', 'Data Telah Terhapus');
+ }
 }

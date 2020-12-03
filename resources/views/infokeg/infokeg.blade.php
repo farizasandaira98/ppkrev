@@ -150,6 +150,7 @@
                 <tr>
                   <th>#</th>
                   <th>Nama Kegiatan</th>
+                  <th>Deskripsi</th>
                   <th>Tanggal kegiatan</th>
                   <th>Tempat Kegiatan</th>
                   <th>Foto Kegiatan</th>
@@ -161,6 +162,7 @@
                 <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $ang->nama_kegiatan }}</td>
+                  <td>{{ $ang->deskripsi }}</td>
                   <td>{{ $ang->tanggal_kegiatan }}</td>
                   <td>{{ $ang->tempat_kegiatan }}</td>
                   <td><?php foreach (json_decode($ang->foto_kegiatan)as $gambar){ ?>
