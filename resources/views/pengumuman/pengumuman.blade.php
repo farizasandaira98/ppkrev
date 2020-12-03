@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Data Kegiatan PKK</title>
+  <title>Data Pengumuman PKK</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -133,7 +133,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Data Kegiatan</h1>
+              <h1 class="m-0">Data Pengumuman</h1>
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -142,34 +142,34 @@
       <div class="container">
         <div class="card mt-5">
           <div class="card-body">
-            <a href="/infokeg/tambah" class="btn btn-primary">Input Kegiatan Baru</a>
+            <a href="/pengumuman/tambah" class="btn btn-primary">Input Pengumuman Baru</a>
             <br/>
             <br/>
             <table class="table table-bordered table-hover table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Nama Kegiatan</th>
-                  <th>Tanggal kegiatan</th>
-                  <th>Tempat Kegiatan</th>
-                  <th>Foto Kegiatan</th>
+                  <th>Judul Pengumuman</th>
+                  <th>Konten Pengumuman</th>
+                  <th>Tanggal Pengumuman</th>
+                  <th>Tambahan</th>
                   <th>OPSI</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach($infokeg as $ang)
+                @foreach($pengumuman as $ang)
                 <tr>
                   <td>{{ $loop->iteration }}</td>
-                  <td>{{ $ang->nama_kegiatan }}</td>
-                  <td>{{ $ang->tanggal_kegiatan }}</td>
-                  <td>{{ $ang->tempat_kegiatan }}</td>
-                  <td><?php foreach (json_decode($ang->foto_kegiatan)as $gambar){ ?>
+                  <td>{{ $ang->judul_pengumuman }}</td>
+                  <td>{{ $ang->konten_pengumuman }}</td>
+                  <td>{{ $ang->tanggal_pengumuman }}</td>
+                  <td><?php foreach (json_decode($ang->tambahan)as $gambar){ ?>
                     <img src='data_file/{{ $gambar }}' style='width:80px; height:120px;'/>
                     <?php } ?>
                   </td>
                   <td>
-                    <a href="/infokeg/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
-                    <a href="/infokeg/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
+                    <a href="/pengunguman/edit/{{ $ang->id }}" class="btn btn-warning">Edit</a>
+                    <a href="/pengunguman/hapus/{{ $ang->id }}" class="btn btn-danger">Hapus</a>
                   </td>
                 </tr>
                 @endforeach

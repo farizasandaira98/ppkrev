@@ -37,6 +37,15 @@ Route::get('/infokeg/edit/{id}', 'InfokegController@edit');
 Route::post('/infokeg/update/{id}', 'InfokegController@update');
 Route::get('/infokeg/hapus/{id}', 'InfokegController@destroy');
 
+
+//Route Pengumuman
+Route::get('/pengumuman', 'PengumumanController@index');
+Route::get('/pengumuman/tambah', 'PengumumanController@tambah');
+Route::post('/pengumuman/store', 'PengumumanController@store');
+Route::get('/pengumuman/edit/{id}', 'PengumumanController@edit');
+Route::post('/pengumuman/update/{id}', 'PengumumanController@update');
+Route::get('/pengumuman/hapus/{id}', 'PengumumanController@destroy');
+
 //Route Login
 Route::get('/', 'AuthController@showFormLogin')->name('login');
 Route::get('login', 'AuthController@showFormLogin')->name('login');

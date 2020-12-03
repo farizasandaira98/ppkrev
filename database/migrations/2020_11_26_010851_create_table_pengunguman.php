@@ -13,10 +13,11 @@ class CreateTablePengunguman extends Migration
      */
     public function up()
     {
-        Schema::create('table_pengunguman', function (Blueprint $table) {
+        Schema::create('table_pengumuman', function (Blueprint $table) {
             $table->id();
-            $table->string('judul_pengunguman',30);
-            $table->date('tanggal_pengunguman');
+            $table->string('judul_pengumuman',30);
+            $table->string('konten_pengumuman',30);
+            $table->date('tanggal_pengumuman');
             $table->string('tambahan',255);
             $table->timestamps();
         });

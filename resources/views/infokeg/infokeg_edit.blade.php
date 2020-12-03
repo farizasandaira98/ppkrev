@@ -70,6 +70,7 @@
           @endif
 
         </div>
+        <label>Input Gambar Kegiatan</label>
         <div class="input-group control-group increment" >
           <input type="file" name="foto_kegiatan[]" class="form-control">
           <div class="input-group-btn"> 

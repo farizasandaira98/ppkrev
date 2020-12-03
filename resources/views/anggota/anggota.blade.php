@@ -104,7 +104,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/pengunguman" class="nav-link">
+            <a href="/pengumuman" class="nav-link">
               <p>
                 Data Pengunguman 
                 <span class="badge badge-info right"></span>

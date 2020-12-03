@@ -108,10 +108,10 @@ class InfoKegController extends Controller
         $image = json_decode($infokeg->foto_kegiatan);
         $length = count($image);
         for ($i = 0; $i < $length; $i++) {
-           unlink(public_path("data_file/".$image[$i]));
-       }
+         unlink(public_path("data_file/".$image[$i]));
+     }
 
-       foreach ($request->file('foto_kegiatan') as $image) {
+     foreach ($request->file('foto_kegiatan') as $image) {
         $namafile = $image->getClientOriginalName();
         $namaasli = pathinfo($namafile, PATHINFO_FILENAME);
         $ekstensi = $image->getClientOriginalExtension();
@@ -121,13 +121,11 @@ class InfoKegController extends Controller
         $data[] = $namafoto;
     }
 
-
-
-    $infokeg->id_anggota = $request->id_anggota;
-    $infokeg->nama_anggota = $request->nama_anggota;
-    $infokeg->tempat_kegiatan = $request->status_anggota;
-    $anggota->foto_kegiatan = $namafoto = json_encode($data);
-    $anggota->save();
+    $infokeg->nama_kegiatan = $request->nama_kegiatan;
+    $infokeg->tanggal_kegiatan = $request->tanggal_kegiatan;
+    $infokeg->tempat_kegiatan = $request->tempat_kegiatan;
+    $infokeg->foto_kegiatan = $namafoto = json_encode($data);
+    $infokeg->save();
     return redirect('infokeg')->with('msg', 'Data Telah Teredit');
 }
 
@@ -139,13 +137,13 @@ class InfoKegController extends Controller
      */
     public function destroy($id)
     {
-       $infokeg = Infokeg::where('id', $id)->first();
-       $image = json_decode($infokeg->foto_kegiatan);
-       $length = count($image);
-       for ($i = 0; $i < $length; $i++) {
-           unlink(public_path("data_file/".$image[$i]));
-       }
-       $infokeg->delete();
-       return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
-   }
+     $infokeg = Infokeg::where('id', $id)->first();
+     $image = json_decode($infokeg->foto_kegiatan);
+     $length = count($image);
+     for ($i = 0; $i < $length; $i++) {
+         unlink(public_path("data_file/".$image[$i]));
+     }
+     $infokeg->delete();
+     return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
+ }
 }
