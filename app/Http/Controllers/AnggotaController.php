@@ -144,6 +144,6 @@ class AnggotaController extends Controller
         $anggota = Anggota::where('id', $id)->first();
         unlink(public_path("data_file/".$anggota->foto));
         $anggota->delete();
-        return redirect('anggota')->with('msg', 'Data Telah Terhapus');;
+        return redirect('anggota')->with('msg', 'Data Telah Terhapus');
     }
 }

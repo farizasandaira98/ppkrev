@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Infokeg;
+use Illuminate\Support\Facades\File;
 
 class InfoKegController extends Controller
 {
@@ -83,7 +84,8 @@ class InfoKegController extends Controller
      */
     public function edit($id)
     {
-        //
+        $infokeg = Infokeg::where('id', $id)->first();
+        return view('infokeg/infokeg_edit', ['infokeg' => $infokeg]);
     }
 
     /**
@@ -95,8 +97,39 @@ class InfoKegController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'nama_kegiatan' => 'required',
+            'tanggal_kegiatan' => 'required',
+            'tempat_kegiatan' => 'required',
+            'foto_kegiatan' => 'required'
+        ]);
+
+        $infokeg = Infokeg::where('id', $id)->first();
+        $image = json_decode($infokeg->foto_kegiatan);
+        $length = count($image);
+        for ($i = 0; $i < $length; $i++) {
+           unlink(public_path("data_file/".$image[$i]));
+       }
+
+       foreach ($request->file('foto_kegiatan') as $image) {
+        $namafile = $image->getClientOriginalName();
+        $namaasli = pathinfo($namafile, PATHINFO_FILENAME);
+        $ekstensi = $image->getClientOriginalExtension();
+        $tujuan_upload = 'data_file';
+        $namafoto = $namaasli."_".$request->nama_kegiatan.".".$ekstensi;
+        $image->move($tujuan_upload,$namafoto);
+        $data[] = $namafoto;
     }
+
+
+
+    $infokeg->id_anggota = $request->id_anggota;
+    $infokeg->nama_anggota = $request->nama_anggota;
+    $infokeg->tempat_kegiatan = $request->status_anggota;
+    $anggota->foto_kegiatan = $namafoto = json_encode($data);
+    $anggota->save();
+    return redirect('infokeg')->with('msg', 'Data Telah Teredit');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -106,12 +139,13 @@ class InfoKegController extends Controller
      */
     public function destroy($id)
     {
-     $infokeg = Infokeg::where('id', $id)->first();
-     $image[] = array($infokeg->foto_kegiatan);
-     foreach ($image as $image) {
-        unlink(public_path("data_file/".json_decode($image)));
-     }
-     $infokeg->delete();
-     return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
- }
+       $infokeg = Infokeg::where('id', $id)->first();
+       $image = json_decode($infokeg->foto_kegiatan);
+       $length = count($image);
+       for ($i = 0; $i < $length; $i++) {
+           unlink(public_path("data_file/".$image[$i]));
+       }
+       $infokeg->delete();
+       return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
+   }
 }
