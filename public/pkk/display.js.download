@@ -1,0 +1,22 @@
+/* 	ejs Plugin
+	Display.js - Get Display info
+	coded by ErenAlbaKaunang, 2013 */
+
+if(	typeof ejs == 'object' && 
+	typeof jQuery != 'undefined'){
+
+ejs.plugin.display = {
+	init: function(){
+		this.fullwidth = $(window).width();
+		this.fullheight = $(window).height();
+
+		return({
+			width: this.fullwidth,
+			height: this.fullheight,
+			outerWidth: this.fullwidth,
+			outerHeight: this.fullheight,
+		});
+	},
+}
+
+}

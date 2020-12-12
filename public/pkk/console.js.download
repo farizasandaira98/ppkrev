@@ -1,0 +1,13 @@
+ejs.console = function(message, tipe){
+	switch( tipe ){
+		case 'error':
+			console.error( message );
+			break;
+		case 'warning':
+			console.warn( message );
+			break;
+		default:
+			console.log( message );
+			break;
+	}
+}

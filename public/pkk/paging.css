@@ -1,0 +1,88 @@
+/*
+ * Paging CSS
+ * Theme: Typo(default);
+ * by LEA Framework
+**/
+
+div.LEAF_paging{
+	width: 100%;
+	clear: both;
+	margin: 20px auto 0;
+	overflow: hidden;
+	background: #E2E2E2;
+	border: solid 1px #CCC;
+	font-family: 'Arial';
+}
+div.LEAF_paging div.trigger{
+	float: left;
+	padding: 7px;
+}
+div.LEAF_paging div.trigger a{
+	float: left;
+	padding: 8px 13px;
+	color: white;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0 5px 0 0;
+}
+div.LEAF_paging div.trigger a.default:hover{
+	background: #666;
+}
+div.LEAF_paging div.info{
+	float: right;
+	padding: 7px;
+}
+div.LEAF_paging div.info div.text{
+	font-size: 12px;
+	padding: 7px 0;
+	color: #575757;
+	font-style: italic;
+	float: left;
+}
+div.LEAF_paging div.info div.goto{
+	float: left;
+	margin: 0 0 0 10px;
+}
+div.LEAF_paging div.info div.goto div.cgoto{
+	float: left;
+	padding: 5px;
+}
+div.LEAF_paging div.info div.goto div.cgoto input.paging-text{
+	width: 40px;
+	height: 20px;
+}
+div.LEAF_paging div.info div.goto div.cgoto div.ke{
+	float: left;
+	color: white;
+	font-weight: bold;
+	font-size: 12px;
+	padding: 3px 10px 0 5px;
+	line-height: 14px;
+}
+div.LEAF_paging div.info div.goto div.cgoto div.input{
+	float: left;
+	background: white;
+	padding-left: 5px;
+}
+div.LEAF_paging div.info div.goto div.cgoto div.input input[type=image]{
+	vertical-align: middle;
+	height: 17px;
+	width: 17px;
+	margin: 2px 2px 1px 0;
+	float: left;
+}
+div.LEAF_paging div.info div.goto div.cgoto div.input input[type=text]{
+	border: none;
+	float: left;
+}
+
+/* COLOR */
+.bgWarnaHitam{
+	background: #424242;
+}
+.bgWarnaBiru{
+	background: #076AFF;
+}
+.bgWarnaMerah{
+	background: #B00;
+}

@@ -1,0 +1,78 @@
+.leafMenu .leafDropdownBox{
+	/*position: absolute;*/
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1900;
+}
+.leafMenu ul.leafDropdownSub{	
+	padding: 10px 0;
+	width: 100%;
+	min-height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1900;
+	background: #666;
+	color: white;
+	overflow: visible;
+}
+.leafMenu ul.leafDropdownSub.open ul{
+	display: none;
+}
+.leafMenu ul.leafDropdownSub li{
+	padding: 2px 0px;
+}
+
+.leafMenu ul.leafDropdownSub li:hover{
+	background: #DDD;
+}
+.leafMenu ul.leafDropdownSub li:hover > a{
+	color: #424242;
+}
+.leafMenu ul.leafDropdownSub li a{
+	color: white;
+	display: block;
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+.leafMenu ul.leafDropdownSub li a i.fa-kanan{
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -7px;
+}
+.leafMenu ul.leafDropdownSub li a i.back{
+	margin-left: 0 !important;
+}
+.leafMenu ul.leafDropdownSub li a:hover{
+	text-decoration: none;	
+}
+
+.leafMenu ul.leafDropdownSub li.breadcrumb{
+	background: none;
+	padding: 0 15px 10px;
+	color: #CCC;
+	margin-bottom: 0 !important;
+	font-size: 11px !important;
+	text-shadow: 0 1px 1px #000;
+}
+.leafMenu ul.leafDropdownSub li.breadcrumb:hover{
+	color: #E2E2E2;
+}
+
+.leafMenu ul.leafDropdownSub li.back{
+	padding: 0px 0px;
+	font-size: 12px;
+	background: #000;
+}
+.leafMenu ul.leafDropdownSub li.back i.fa{
+	margin-left: 0 !important;
+	margin-right: 5px !important;
+}
+.leafMenu ul.leafDropdownSub li.back:hover{
+	background: #000 !important;
+}
+.leafMenu ul.leafDropdownSub li.back:hover a{
+	color: #DDD !important;
+}

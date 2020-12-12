@@ -1,0 +1,248 @@
+
+/*background*/
+body{
+	background-color: #6E4327 !important;
+}
+
+/*header and fotter*/
+.pm-sub-menu-container {
+    /*background-color: #CFFF59 !important;*/
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e2ff53+0,a3e842+100 */
+    background: rgb(226,255,83); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(226,255,83,1) 0%, rgba(163,232,66,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,255,83,1)), color-stop(100%,rgba(163,232,66,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(226,255,83,1) 0%,rgba(163,232,66,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(226,255,83,1) 0%,rgba(163,232,66,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(226,255,83,1) 0%,rgba(163,232,66,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(226,255,83,1) 0%,rgba(163,232,66,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2ff53', endColorstr='#a3e842',GradientType=0 ); /* IE6-9 */
+
+}
+
+/*widged header*/
+.ui-widget-header{
+    background-color : rgb(46, 129, 54) !important;
+}
+
+.pm-page-title {
+    font-size: 45px !important;
+}
+
+.pm-widget{
+	border: solid 1px #DDD;
+}
+
+.tanggalan{
+	margin-top: 20px;
+	margin-bottom: 0px !important;
+	padding: 10px 0px !important;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.pm-sidebar .pm-widget{
+	padding: 0px 0px 10px;
+	background: #F9F9F9;
+}
+
+.ui-datepicker{
+	box-shadow: none;
+}
+
+#fixed{
+	left: 0 !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+.fixedHeader{
+	padding: 10px 5px !important;
+}
+
+.pm_quick_contact_field.Light{
+	font-size: 14px !important;
+	border: solid 1px #CCC;
+}
+
+.row-container{
+	background: #CCC !important;
+	border-top: solid 5px #ABABAB;
+}
+
+.middle-container,
+#pm_layout_wrapper > .container{
+	background: white;
+}
+
+.pm-sub-header-breadcrumbs{
+	background: #424242;
+}
+.pm-breadcrumbs li,
+.pm-breadcrumbs li a{
+	color: white;
+}
+
+.pm-sidebar .pm-widget h6{
+	padding-top: 12px !important;
+	padding-bottom: 12px !important;
+}
+.pm-post-loaded-info{
+	border-top: none;
+}
+
+header{
+	padding: 17px 0;
+	text-transform: uppercase;
+	background-color: #fff;
+	background-image: url(../img/bg.png);
+}
+
+.pm-sub-menu-container{
+	font-family: "Source Sans Pro", "Arial";
+}
+
+.pm-caption h1,
+.pm-caption span{
+	background: #2D2D2D;
+	border-radius: 0px;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+	font-family: "Source Sans Pro", "Arial";
+
+	opacity: 0.77 !important;
+}
+.pm-caption{
+	padding-top: 20px !important;
+}
+
+.pm-boxed-mode{
+	border: solid 1px #CCC;
+	box-shadow: 0 0 10px #666;
+}
+
+.pm-caption-excerpt{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.pm-general-icon{
+	font-family: "FontAwesome" !important;
+}
+
+.pm-fat-footer-title-divider{
+	width: 100%;
+}
+
+header > .container{
+	padding-left: 30px;
+}
+
+.textheader h4{
+	margin-top: 13px;
+	margin-bottom: 5px;
+	font-size: 17px;
+}
+.textheader h6{
+	margin-top: 2px;
+	letter-spacing: 1px;
+	font-size: 11px !important;
+}
+
+.logo{
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 14px;
+}
+.logo img{
+	padding-right: 10px;
+}
+
+.rtext button{
+	/*border-radius: 50%;*/
+}
+
+#divFormGuestBook textarea{
+	height: 120px !important;
+}
+
+.pm-caption{
+	margin-left: 300px !important;
+}
+.pm-caption-excerpt{
+	padding: 20px !important;
+}
+
+.pm-standalone-news-post-title a {
+  color: #859801 !important;
+  text-align: justify !important;
+  text-transform: uppercase !important;
+  font-family: verdana !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  display: block !important;
+  letter-spacing: 1px !important;
+  margin-bottom: 50px !important;
+ }
+
+.pm-standalone-news-post-excerpt{
+  text-align: justify !important;
+  padding-top: 5px;
+  padding-bottom: 50px;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+
+
+ .pm-standalone-news-post-excerpt p {
+  font-family: 'Source Sans Pro', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  color: #413B3B !important;
+  text-align: left !important;
+  margin-bottom: 20px !important;
+  padding: 0px 20px 20px !important;
+} 
+
+.pm-standalone-news-post-excerpt-detail p {
+  font-family: 'Source Sans Pro', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  color: #413B3B !important;
+  text-align: left !important;
+  margin-bottom: 20px !important;
+  padding: 0px 20px 20px !important;
+}
+
+#back-top{
+	background-color: rgba(255,255,255, 0.2) !important;
+}
+
+.square{
+    border-radius: 50px;
+}
+
+.milestone {
+    margin: 30px 0px !important;
+}
+
+/*tab bukutamu*/
+.nav-tabs > li > a , .tab-content .tab-pane p  {
+	color : #32883B !important;
+}
+
+.fade.in {
+    /*position: fixed;*/
+}
+
+.pm-dots {
+    z-index: 100 !important;
+}
+
+.sf-menu a {
+    font-size: 13px;
+    color: #3d5b22 !important;
+}
+
+.cust_name{
+	font-size: 17px;
+}

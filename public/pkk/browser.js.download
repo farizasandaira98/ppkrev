@@ -1,0 +1,23 @@
+/* 	ejs Plugin
+	Display.js - Get Browser info
+	coded by ErenAlbaKaunang, 2013 */
+
+if(	typeof ejs == 'object' && 
+	typeof jQuery != 'undefined'){
+	
+ejs.plugin.browser = {
+	init: function(){
+		var v = '';
+		var i = 0;
+		for(var p in navigator){
+			if(i<17){
+				v += p + " => " + navigator[p] + "||\n";
+			}
+			i++;
+		}
+		var v = v.split('||');
+		this.info = v;	
+	},
+}
+
+}

@@ -1,0 +1,40 @@
+ul.chosen-results > li {
+	font-weight: normal;
+}
+ul.chosen-results > li.group-result{
+	background: #FFE0AF;
+	font-weight: bold;
+	border-top: solid 1px #E8AF4E;
+	border-bottom: solid 1px #E8AF4E;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.chosen-container-single .chosen-single{
+	border-radius: 0px;
+}
+
+.chosen-container{
+	width: 100% !important;
+}
+
+/* Change Size Chosen Select Box Style */
+.chosen-container{
+	font-size: 13px;
+}
+.chosen-container-single .chosen-single{
+	padding: 5px 0px 0px 8px;
+	height: 35px;
+}
+.chosen-container-single .chosen-single div b{
+	background: url('chosen-sprite.png') no-repeat 0px 6px;
+}
+.chosen-container-active.chosen-with-drop .chosen-single div b{
+	background-position: -18px 8px;
+}
+.chosen-container-multi .chosen-choices{
+	padding: 5px;
+}
+.chosen-container-multi .chosen-choices li.search-choice{
+	padding: 10px 20px 10px 10px;
+}

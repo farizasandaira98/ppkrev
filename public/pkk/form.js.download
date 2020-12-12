@@ -1,0 +1,676 @@
+/** 	
+ * Form.js
+ * by EJS Plugins
+ *
+ * Digunakan untuk menghandle proses form submit dengan custom proses.
+ *
+ * @author ErenAlbaKaunang
+ * @lastupdate Apr, 2016
+ */
+
+if(	typeof ejs == 'object' && 
+	typeof jQuery != 'undefined'){
+
+ejs.plugin.form = {
+	data: [],
+	style: [],
+	useEncryption: [],
+	formData: [],
+	ajaxsuccess: '100',
+	autocloseTimeout: false,
+
+	use_sha1: [],
+	use_md5: [],
+
+	reset: function(option)
+	{
+		if(typeof option == 'object')
+			this.data[option.initial] = null;
+		else
+			this.data = null;
+	},
+
+	
+	disable: function(id, time)
+	{
+		$(id).attr({'disabled' : 'disabled'});
+		setTimeout(
+			function(){
+				$(id).removeAttr('disabled');
+			}, time*1000
+		);
+	},
+	
+
+	setResult: function(option)
+	{
+		if( option.responsive === false ){
+			var width = $(option.target).width();
+			var marginLeft = ((width+22)/2);
+			// $(option.target).css({'margin-left': -marginLeft});
+		}
+
+		if( option.autoClose === true ){
+			this.autocloseTimeout = setTimeout(function(){
+				$(option.target).fadeOut(350);
+			}, option.timeoutLength);
+		}
+		
+		$(option.target).click(function(){
+			$(this).fadeOut();
+			if( ejs.plugin.form.autocloseTimeout !== false ) clearTimeout(ejs.plugin.form.autocloseTimeout);
+		});
+	},
+
+
+	focusOnError: function(userOption)
+	{
+		var option = {
+			border	: 'solid 1px red',
+			bgcolor	: 'white',
+			focus 	: true
+		}
+
+		for(i in userOption) option[i] = userOption[i];
+
+		option.target.css({
+			/*'border':option.border,*/
+			'background':option.bgcolor
+		});
+		option.target.addClass('ejsFormOnError');
+
+		if(option.focus === true){
+			option.target.focus();
+
+			if( option.target.is(":visible") ){
+				$('html').stop().animate({
+				    scrollTop: ((option.target.offset().top)-50)
+				}, {
+					duration: 1000,
+					complete: function(){
+						option.target.trigger('ejs.onFocusOnErrorComplete');
+					}
+				});
+			}
+		}
+	},
+	
+	
+	getDefaultStyle: function(param)
+	{
+		var style = [];
+
+		param.target.each(function(i){
+			if( $(this).attr("data-foe") != '0' ){
+				var thisStyle = $(this).attr('style');
+				if( typeof thisStyle != 'undefined' ){
+					style[i] = thisStyle;
+				}
+			}
+		});
+
+		this.style[param.initial] = style;
+	},
+
+
+	setDefaultStyle: function(param)
+	{
+		var style = this.style;
+
+		param.target.each(function(i){
+			if( $(this).attr("data-foe") != '0' ){
+				$(this).removeAttr('style');
+				
+				var thisStyle = style[param.initial][i];
+				if( typeof thisStyle != 'undefined' ){
+					$(this).attr({
+						'style': thisStyle
+					});
+				}
+			}
+		});
+	},
+
+
+	set:{
+		disabled: function($f){
+			$f.find('input, textarea, select').attr('disabled', 'disabled');
+		}, // function.disabled
+
+		readonly: function($f){
+			$f.find('input, textarea, select').attr('readonly', 'readonly').addClass('readonly');
+		}, // function.readonly
+	},
+
+
+	remove:{
+		disabled: function($f){
+			$f.find('input, textarea, select').removeAttr('disabled');
+		}, // function.disabled
+
+		readonly: function($f){
+			$f.find('input, textarea, select').removeAttr('readonly').removeClass('readonly');
+		}, // function.readonly
+	},
+
+
+	declareFormData: function()
+	{
+		if( ejs.plugin.form.formData === null )
+			ejs.plugin.form.formData = new FormData();
+	},
+
+	
+	register: function(option)
+	{	
+		var formData = new FormData();
+
+		/*
+		 | Reset Value "this.data"
+		 | Setiap melakukan register, maka reset value pada variable this.data[initial]
+		 */
+		this.data[option.initial] = '';
+		
+
+		var data = null,
+			xArray=[];
+		
+		$( option.form ).each(function(){
+			var nama = this.id,
+				data_ejsid = $(this).attr('data-ejsid'),
+				value = null,
+				type = $(this).attr('type');
+			
+			if( typeof data_ejsid !== 'undefined' &&
+				data_ejsid !== false ){
+
+				nama = data_ejsid;
+			}
+
+			value = $(this).val();
+
+			if( nama == '' || nama==undefined ){
+				nama = $(this).attr('data-id'); //dulunya 'data-id'
+			}
+			
+			if(this.alt == 'MD5' || $(this).attr('data-encrypt') == 'md5' ){
+				var checkValue = value.replace(/\s/g, '');
+				if( checkValue!='' && typeof MD5 == 'function' ){
+					value = MD5(value);
+
+					ejs.plugin.form.use_md5[nama] = value;
+				}
+			}
+
+			else if(this.alt == 'SHA1' || $(this).attr('data-encrypt') == 'sha1'){
+				var checkValue = value.replace(/\s/g, '');
+				if( checkValue!='' && typeof SHA1 == 'function' ){
+					value = SHA1(value);
+
+					ejs.plugin.form.use_sha1[nama] = value;
+				}
+			}
+			
+			if( type=='radio' || type=='checkbox' ){
+				if( typeof xArray[nama] == 'undefined' ) xArray[nama] = [];				
+				xArray[nama].push({
+					object: $(this),
+					nama: nama,
+					value: value
+				});
+			}	
+			else{
+				data == null ?
+					data = nama+'='+value :
+					data = data +'&'+ nama+'='+value;
+
+				// FormData
+				if( type == 'file' )
+					value = $(this)[0].files[0];
+
+				formData.append( nama, value );
+			}
+		});
+		
+		for( i in xArray ){
+			var isChecked = false,
+				nama = i;
+
+			for( ii in xArray[i] ){
+				var target = $(xArray[i][ii].object),					
+					value = xArray[i][ii].value;
+				
+				if( target.prop('checked') ){
+					isChecked = true;
+
+					formData.append( nama, value );
+
+					data == null ?
+						data = nama+'='+value :
+						data = data +'&'+ nama+'='+value;
+				}
+			}
+
+			if( isChecked === false ){
+
+				formData.append( nama, '' );
+
+				data == null ?
+					data = nama+'=' :
+					data = data +'&'+ nama+'=';
+			}
+		}
+		
+		this.data[option.initial] != null ?
+			this.data[option.initial] = this.data[option.initial] + '&' + data:
+			this.data[option.initial] = data;
+
+		return formData;		
+	},
+
+
+	addFormData: function( keyName, thatValue )
+	{
+		ejs.plugin.form.formData[keyName] = thatValue;
+	},
+
+
+	auth: function(param)
+	{
+		if( typeof ajaxsuccess == 'undefined' ) var ajaxsuccess = this.ajaxsuccess;
+		if( this.autocloseTimeout !== false ) clearTimeout(this.autocloseTimeout);
+
+		ejs.plugin.form.formData = [];
+
+		var thisForm = this,
+			formData = null,
+
+		option = {
+			form: $('form.register'),
+			foe: false,
+			type: param.foe===true?'json':'html',
+			itemRegister: '.register',
+			responsive: false,
+			autoClose: false,
+			timeoutLength: 3000,
+			onError: false,
+			onSuccess: false,
+			onSuccessText: 'Redirecting...',
+			afterSubmit: false,
+			useModalAlert: false,
+			maxResendRequest: 0,
+			preloader_delay: 2,
+			processData: true,
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			useFormData: false,
+			onBeforeSubmit: false,
+		};
+
+		for(i in param) option[i] = param[i];
+
+		option.form.each(function(){
+			$(this).removeAttr('onsubmit');
+
+			var ini = this,
+				$f = $(this),
+				$result = $(this).find('.result'),
+				formid = typeof $(this).attr('id') == 'undefined'?"form":$(this).attr("id"),				
+				initial = typeof MD5 == 'function'? MD5(formid) : formid,
+				ajax,
+				jsonResult,
+				normalResult,
+				caseSuccess,
+				caseError,
+				appendVar = option.type=='json'?'&_ejs_ajax=1&_ejs_json=1':'&_ejs_ajax=1',
+
+				setToEjsDataId = function()
+				{
+					$f.find(option.itemRegister).each(function(){
+						if( typeof $(this).attr('data-ejsid') == 'undefined' ){
+							$(this).attr('data-ejsid', $(this).attr('name') );
+						}
+					});
+				},
+
+
+				beginProcessSubmit = function()
+				{
+					ejs.plugin.form.set.disabled($f);
+					$f.find(option.itemRegister).removeClass('ejsFormOnError');
+
+					$result
+						.show()
+						.removeClass('failed success')
+						.addClass('auth')
+						.html('Validating...');
+
+					formData = ejs.plugin.form.register({ 	
+						form: $f.find(option.itemRegister), 
+						initial: initial,
+					});
+
+					ejs.plugin.form.setResult({
+						target: $result,
+						responsive: option.responsive,
+						autoClose: option.autoClose,
+						timeoutLength: option.timeoutLength
+					});
+					ejs.plugin.form.setDefaultStyle({
+						target: $f.find(option.itemRegister),
+						initial: initial
+					});
+					
+					if( option.useFormData === true )
+					{
+						option.contentType = false;
+						option.processData = false;
+
+						formData.append('_ejs_ajax', '1');
+						if( option.type == 'json' )
+							formData.append('_ejs_json', '1');
+
+						for( var i in ejs.plugin.form.formData ){
+							formData.append(i, ejs.plugin.form.formData[i]);
+						}
+
+						data = formData;
+					}
+					else
+					{
+						data = ejs.plugin.form.data[initial] + appendVar;
+					}
+
+					ejs.ajax({
+						method: 'POST', 
+						url: $f.attr('action'),
+						dataType: option.type,
+						data: data,
+						maxResendRequest: option.maxResendRequest,
+						preloader_delay: option.preloader_delay,
+						processData: option.processData,
+						contentType: option.contentType,
+						async: true,
+						timeout: 30000,
+						success: function( result ){
+							endProcessSubmit( result );
+						}
+					});
+				}, /*function.beginProcessSubmit*/
+
+
+				caseSuccess = function(ajaxResult)
+				{					
+					$f.append('<input type="hidden" name="_ejs_direct" value="'+ajaxsuccess+'" class="_direct_" />');
+					$result.fadeOut(3000);
+
+					for(i in ejs.plugin.form.useEncryption){
+						var value = ejs.plugin.form.useEncryption[i];
+						$('#'+i).val(value);
+					}
+
+
+					/*
+					 | Set value untuk object yang menggunakan MD5
+					 */
+					for( var i in ejs.plugin.form.use_md5 ){
+						var value = ejs.plugin.form.use_md5[i];
+						$('*[name='+i+']', $f).val(value);
+					}
+
+
+					/*
+					 | Set value untuk object yang menggunakan SHA1
+					 */
+					for( var i in ejs.plugin.form.use_sha1 ){
+						var value = ejs.plugin.form.use_sha1[i];
+						$('*[name='+i+']', $f).val(value);
+					}
+
+					
+					if(typeof option.onSuccess == 'function'){
+						option.onSuccess($f, ajaxResult);
+					}
+					else{
+						ejs.plugin.form.set.readonly($f);
+						
+						if( option.useModalAlert === true ){
+							$(true).modalAlert({
+								title: '<i class="fa fa-info-circle fa-fw"></i> Validation Success',
+								message: option.onSuccessText,
+								modalType: false,
+								bgcolor: "modalColor-bgSuccess",
+								footer: false
+							});
+						}
+						else{
+							$result
+								.addClass('success')
+								.html(option.onSuccessText);
+
+							ejs.plugin.form.setResult({
+								target: $result,
+								responsive: option.responsive,
+								autoClose: option.autoClose,
+								timeoutLength: option.timeoutLength
+							});
+						}
+
+						/**
+						* Submit biasa, jika onSuccess tidak didefinisikan sebagai function.
+						*/
+						$f.off('submit').removeAttr('onsubmit');
+						document.getElementById(formid).submit();
+					}
+
+					return(false);					
+				}, /*function.caseSuccess*/
+
+
+				CaseError = {
+					focusOnError: function(target){
+						if(typeof target == 'object'){
+							for(i in target){
+								ejs.plugin.form.focusOnError({
+									target: $f.find('*[data-ejsid="'+target[i]+'"]'),
+								});
+							}
+						}
+						else{
+							ejs.plugin.form.focusOnError({
+								target: $f.find('*[data-ejsid="'+target+'"]'),
+							});
+						}
+					}, /* focusOnError */
+
+					custom: function(param){
+						var that = this;
+
+						option.onError(param.result, param.target, that);
+					}, /* custom */
+
+					_default: function(param){
+						$result
+							.addClass('failed')
+							.html(param.result);
+
+						ejs.plugin.form.setResult({
+							target: $result,
+							responsive: option.responsive,
+							autoClose: option.autoClose,
+							timeoutLength: option.timeoutLength
+						});
+
+						this.focusOnError(param.target);
+					}, /* _default */
+
+					modalAlert: function(param){
+						var that = this,
+
+						$modal = $(true).modalAlert({
+							message: param.result,
+							title: '<i class="fa fa-info-circle fa-fw"></i> Error',
+							modalType: false,
+							bgcolor: "modalColor-bgError"
+						});
+
+						$modal.on('shown.bs.modal', function(){
+							$result.hide();
+							$modal.find('*[data-dismiss=modal]').focus();
+						});
+
+						$modal.on('hidden.bs.modal', function(){
+							that.focusOnError(param.target);				
+						});
+					}, /* modalAlert */
+				}, /* caseError */
+				
+
+				jsonResult = function()
+				{
+					var that = this,
+						result = ajax.result,
+						target = ajax.target;
+					
+					/*
+					 | Kalau ternyata balikan suksesnya bertipe "number",
+					 | maka convert ajaxsuccess menjadi tipe "number"
+					 | @since Apr/2016
+					 */
+					if( typeof result == 'number' )
+						ajaxsuccess = parseInt( ajaxsuccess );
+
+					switch( result ){
+						case ajaxsuccess:
+							caseSuccess(ajax);
+							break;
+
+						default:
+							if( option.useModalAlert === true && 
+								typeof jQuery().modal == 'function' &&
+								typeof jQuery().modalAlert == 'function' ){
+
+								CaseError.modalAlert({
+									result: result,
+									target: target
+								});
+							}
+							else if( typeof option.onError == 'function' ){
+								CaseError.custom({
+									result: ajax,
+									target: target,
+								});
+							}
+							else{
+								CaseError._default({
+									result: result,
+									target: target
+								});
+							}							
+							break;
+					}
+				}, /*function.jsonResult*/
+
+
+				normalResult = function()
+				{
+					/*
+					 | Kalau ternyata balikan suksesnya bertipe "number",
+					 | maka convert ajaxsuccess menjadi tipe "number"
+					 | @since Apr/2016
+					 */
+					if( typeof ajax == 'number' )
+						ajaxsuccess = parseInt( ajaxsuccess );
+
+					switch( ajax ){
+						case ajaxsuccess:
+							caseSuccess(ajax);
+							break;
+						default:
+							if( option.useModalAlert === true && 
+								typeof jQuery().modal == 'function' &&
+								typeof jQuery().modalAlert == 'function' ){
+
+								CaseError.modalAlert({
+									result: ajax
+								});
+							}
+							else if( typeof option.onError == 'function' ){
+								CaseError.custom({
+									result: ajax
+								});
+							}
+							else{
+								CaseError._default({
+									result: ajax
+								});
+							}
+							break;
+					}
+				}, /*function.normalResult*/
+
+
+				endProcessSubmit = function( formSubmitResult )
+				{
+					ajax = formSubmitResult;
+					
+					ejs.plugin.form.remove.disabled($f);
+					switch( option.type ){
+						case 'json':
+							if( typeof ajax == 'object' ){
+								if( typeof option.afterSubmit == 'function' )
+									option.afterSubmit( ajax, jsonResult );
+								else
+									jsonResult();
+							}
+							else{
+								ejs.die("Ajax Return not as Object.");
+							}
+							break;
+						default:
+							normalResult();
+							break;
+					}
+
+					ejs.plugin.form.reset({
+						initial: initial
+					});
+				}; /*function.endProcessSubmit*/
+
+
+			setToEjsDataId();
+
+			ejs.plugin.form.getDefaultStyle({
+				target: $f.find(option.itemRegister),
+				initial: initial,
+			});
+
+			$f.off('submit').on('submit', function(){
+				$f.attr({
+					id: formid
+				});
+
+				if( typeof option.onBeforeSubmit == 'function' )
+				{
+					if( option.onBeforeSubmit( $f, ejs.plugin.form ) === false ) 
+					    return(false);
+				}
+
+				/* Begin Process Submit */
+				beginProcessSubmit();
+
+				/* End Process Submit */
+				// endProcessSubmit();
+			
+				return(false);
+			}); // submit.
+		}); // each.
+	},
+
+
+	validate: function( params )
+	{
+		return ejs.plugin.form.auth( params );
+	}
+}
+
+}

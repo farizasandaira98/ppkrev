@@ -1,0 +1,34 @@
+$(function(){
+
+	var toggle = false;
+	var fixedBoxsize = $('#fixed').outerHeight()+'px',
+		Parent = $("#fixed"),
+		Header = $(".fixedHeader"),
+
+		$login_chat = $('.fixedContent:visible');
+
+	var login = $login_chat.outerHeight() + 40;
+
+	/*
+	 | Hide semua fixedContent
+	 */
+	$('.fixedContent').outerHeight(0);
+
+
+	Header.click(function(){           
+		toggle = (!toggle) ? true : false;
+
+		var $login_chat = $('.fixedContent:visible');
+
+		if( $login_chat.attr('data-name') == 'chatbox' ){
+			login = 430;
+		}
+		
+		if( toggle ){
+			$login_chat.animate({height: login}, 500);
+		}
+		else{
+			$login_chat.animate({height: 0}, 500); 
+		}
+	});
+});

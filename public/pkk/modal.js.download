@@ -1,0 +1,387 @@
+/**
+* jQuery Modal Alert
+*
+* Dependencies:
+* - jQuery 1.9+
+* - Bootstrap 3.0+
+* - ejs plguins "classy.css"
+*
+* @lastupdated Mar,2015
+* @author ErenAlbaKaunang
+*/
+
+$(function(){
+	var modalAlertID = 0,
+		lastZIndex = false;
+			
+	jQuery.fn.extend({
+		modalAlert : function(settings){
+			var modal_alay_style = '';
+			if( typeof modal_alay == 'boolean' ) modal_alay_style = 'animated';
+
+			var setContent = function(param){
+				modalAlertID++;
+
+				var 
+				zIndex = (param.zIndex+1),
+				content = 
+				'<div id="TB_backdropModalAlert'+modalAlertID+'" class="modal-backdrop fade in ejs_plugins" data-byModalAlert="true" style="z-index:'+zIndex+'"></div>'+
+				'<div id="TB_modalAlert'+modalAlertID+'" data-modalAlertId="'+modalAlertID+'" data-byModalAlert="true" class="modal fade thisModalAlert ejs_plugins" role="dialog" data-keyboard="false" aria-labelledby="TB_modalAlertLabel" aria-hidden="true" data-bakcdrop="static" style="z-index:'+zIndex+'; overflow-x: hidden; overflow-y: auto;">'+
+		  		'	<div class="modal-dialog '+param.modalType+'">'+
+		    	'		<div class="modal-content '+modal_alay_style+' rubberBand">'+
+				'      		<div class="modal-header modalAlert-bgColor fcwhite '+param.bgcolor+'">'+
+				'				<button type="button" class="close" title="Close" data-tooltipster="1" data-dismiss="modal" aria-hidden="true"><i class="fa fa-fw fa-times"></i></button>'+
+				'				<button type="button" class="close" title="Fullsize" data-tooltipster="1" data-fullscreen="1"><i class="fa fa-fw fa-expand"></i></button>'+
+		        '				<h5 class="modal-title ffarial fwbold fsz12" id="modalDatatable">'+
+				'        			<i class="fa fa-info-circle fa-fw"></i>'+
+				'		          	&nbsp;'+
+				'		          	Dialog Box'+
+		        '				</h5>'+
+		      	'			</div>'+
+
+		      	'			<div class="modal-body">'+
+		        '				<div class="content" style="overflow-x: auto; width: 100%;">'+
+		        ' 					Content'+
+		        '				</div>'+
+		      	'			</div>'+
+
+		      	'			<div class="modal-footer">'+
+		        '				<button type="button" class="btn modalAlert-bgColor fcwhite '+param.bgcolor+'" data-dismiss="modal">Tutup</button>'+
+		      	'			</div>'+
+		    	'		</div>'+
+		  		'	</div>'+
+				'</div>';
+
+				$('body').append(content);
+				lastZIndex = zIndex;				
+			};
+
+			if( typeof settings.zIndex == 'undefined' && lastZIndex !== false ) settings.zIndex = lastZIndex;
+
+			var optionSetContent = {
+				zIndex: 10000,
+				bgcolor: false,
+				modalType: 'modal-lg'
+			}			
+			jQuery.extend(true, optionSetContent, settings);
+
+
+			/*
+			 | Mulai generate & set content Modal, kemudian append ke <body>
+			 */
+			setContent(optionSetContent);
+
+
+			/*
+			 | Modal Handler
+			 | Start here..............
+			 */
+			var $modalAlert 		= $('#TB_modalAlert'+modalAlertID),
+				$modalBackdrop 		= $('#TB_backdropModalAlert'+modalAlertID),
+
+				$modalDialog 		= $modalAlert.children(".modal-dialog"),
+				$modalContent 		= $modalDialog.children(".modal-content"),
+
+				$modalHeader 		= $modalContent.children(".modal-header"),
+				$modalTitle 		= $modalHeader.children('.modal-title'),
+				$modalBody 			= $modalContent.children(".modal-body"),
+				$modalBodyContainer = $modalBody.children('.content'),
+				$modalFooter 		= $modalContent.children(".modal-footer"),
+
+				$button_fullscreen 	= $modalHeader.children("button[data-fullscreen=1]"),
+
+				useEvent 			= 'show.bs.modal',
+
+				modalBodyContent 	= '.modal-body > .content',				
+				modalTitle 			= '.modal-title',
+
+				okeButton 			= '.modal-footer .oke[data-ok=1]',
+				cancelButton 		= ".modal-footer .cancel[data-dismiss='modal']",
+
+				utility = {
+					hideBsModal: function(){
+						$modalBackdrop.fadeOut(500).queue(function(){
+							$(this).remove().dequeue();
+							$modalAlert.remove();
+
+							utility.hiddenBsModal();
+						});
+					},
+
+					hiddenBsModal: function(){
+						$('body, html').css('overflow', 'auto');
+						
+						$('.modal[data-byModalAlert=true]').each(function(i){
+							$('body, html').css('overflow', 'hidden');
+						});
+					},
+
+					Set:{ 
+						content: function(html){
+							$modalAlert.find(modalBodyContent).html(html);
+						}
+					}
+				};
+
+			// on HIDE.
+			$modalAlert.on('hide.bs.modal', function(){
+				$modalContent.addClass(modal_alay_style+' rollOut');
+				utility.hideBsModal();
+			});
+
+			// on HIDDEN.
+			$modalAlert.on('hidden.bs.modal', function(){
+				utility.hiddenBsModal();
+			});
+
+			// on SHOW.
+			$modalAlert.off(useEvent).on(useEvent, function (e){
+				/*
+				 | Aktifkan jQuery Tooltipster jika memungkinkan.
+				 */
+				if( typeof $.eplugins.tooltipster == "function" )
+					$.eplugins.tooltipster({
+						target: $modalAlert.find("*[data-tooltipster=1]")
+					});
+
+				/*
+				 | Disable Scroll pada element body & html.
+				 */
+				$('body, html').css('overflow', 'hidden');
+
+				/*
+				 | Button Fullscreen Handler.
+				 */
+				$button_fullscreen.toggle(function(){
+					$modalDialog.addClass("fullwh nomargin");
+					$modalContent.css({
+						"top" : 0,
+						"left" : 0,
+						"width" : "auto",
+						"height" : "auto",
+						"position" : "relative"
+					});
+					$modalBody.css("width","100%");
+				},
+				function(){
+					$modalBody.css("width","100%");
+					$modalDialog.removeClass("fullwh nomargin");
+				});
+
+
+				/*
+				 | Ambil informasi dari button yang diklik
+				 */
+				if( typeof e.relatedTarget == 'object' ){
+					if( e.relatedTarget.directLink === true || 
+						e.relatedTarget.otherConfirm === true ){
+
+						$url = e.relatedTarget.url;
+						$type = e.relatedTarget.type;
+						$message = e.relatedTarget.message;
+						$title = e.relatedTarget.title;
+					}
+					else{
+						$url = $(e.relatedTarget).attr('data-url');
+						$type = $(e.relatedTarget).attr('data-type');
+						$message = $(e.relatedTarget).attr('data-message');
+						$title = $(e.relatedTarget).attr('data-title');
+					}
+				}
+
+				/*
+				 | Set attribute "opened=true", digunakan pada beberapa proses
+				 */
+				$(this).attr("data-opened", 1);
+
+
+				var defaultOptions = {
+					url: $url,
+					type: $type,
+					message: $message,
+					title: $title,
+					draggable: false,
+					resizable: true,
+					fullsize: true
+				}
+
+				/*
+				 | Extend informasi yang telah ada 
+				 | sesuai dengan request settings yang dimasukkan.
+				 */
+				jQuery.extend(true, defaultOptions, optionSetContent);
+
+
+				switch( defaultOptions.type ){
+					case "confirmLink":
+					case "confirmFormSubmit":
+					case "otherConfirm":
+						$modalFooter.html(
+							'<button type="button" class="btn modalAlert-bgColor fcwhite oke '+defaultOptions.bgcolor+'" data-ok="1">OK</button>'+
+							'<button type="button" class="btn modalAlert-bgColor fcwhite cancel '+defaultOptions.bgcolor+'" data-dismiss="modal">Cancel</button>'
+						);
+						break;
+
+					default: break;
+				}
+
+				/*
+				 | Check apakah menggunakan footer ?
+				 */
+				if( defaultOptions.footer === false ){
+					$modalFooter.remove();
+				}
+
+
+				/*
+				 | Apakah menggunakan fitur UI Draggable ?
+				 */
+				if( $modalContent.hasClass("ui-draggable") ){
+					$modalContent.draggable('destroy');
+				}
+
+				if( defaultOptions.draggable === true && typeof $().draggable != 'undefined' ){
+					$modalContent.draggable({ 
+						handle: $modalHeader, 
+						cursor: 'move',
+						containment: $modalAlert,
+						opacity: 0.6
+					});
+				}
+
+				/*
+				 | Apakah menggunakan fitur UI Resizable ?
+				 */
+				if( defaultOptions.resizable === true && typeof $().resizable != 'undefined' ){
+					$modalContent.resizable({
+						alsoResize: $modalContent.find(".modal-body"),
+						autoHide: true
+					});
+				}
+
+				/*
+				 | Apakah menggunakan fitur Fullsize ?
+				 */
+				if( defaultOptions.fullsize === false )
+					$button_fullscreen.remove();
+
+				$modalBodyContainer.html(defaultOptions.message);
+				$modalTitle.html(defaultOptions.title);
+
+
+				// Pass form reference to modal for submission on yes/ok
+				var form = $(e.relatedTarget).parents('form');
+				if( typeof form != 'undefined' ){
+					$modalAlert.find(okeButton).data('form', form);
+				}
+
+				$modalAlert.find('.modal-footer button.btn').focus();
+
+				/*
+				 | Button OKE Handler
+				 */
+				$modalAlert.find(okeButton).off('click').on('click', function(){						
+					if( defaultOptions.type == 'confirmLink' ){
+						window.location.href = defaultOptions.url;
+					}
+					else if( defaultOptions.type == 'confirmFormSubmit' ){
+						// $modalAlert.data('form').submit();							
+						defaultOptions.$form.submit();
+					}
+					else{
+						if( typeof e.relatedTarget.onReturnTrue == 'function' ){
+							e.relatedTarget.onReturnTrue($modalAlert);
+						}
+					}
+				});
+
+				/*
+				 | Button Cancel Handler
+				 */
+				$modalAlert.find(cancelButton).off("click").on("click", function(){
+					if( typeof e.relatedTarget.onReturnFalse == 'function' ){
+						e.relatedTarget.onReturnFalse($modalAlert);
+					}
+				});
+			});
+
+			// Show the modal.
+			$modalAlert.modal('show', settings);
+
+			// Return modal dengan beberapa tambahan variable.
+			$.extend(true, $modalAlert, utility);
+			return($modalAlert);
+		},
+
+		modalConfirmLink : function(settings){
+			return $(this).modalAlert({
+				url: settings.url,
+				type: "confirmLink",
+				title: settings.title,
+				message: settings.message,
+				bgcolor: "modalAlert-bgConfirmLink",
+				modalType: false
+			});
+		},
+
+		modalConfirmSubmit : function(settings){
+			return $(this).modalAlert({
+				$form: settings.$form,
+				type: "confirmFormSubmit",
+				title: settings.title,
+				message: settings.message,
+				bgcolor: "modalAlert-bgConfirmFormSubmit",
+				modalType: false
+			});
+		},
+
+		modalConfirm : function(settings){
+			if( typeof settings.onReturnTrue == "function" ){
+				return $(this).modalAlert({
+					type: "otherConfirm",
+					title: settings.title,
+					message: settings.message,
+					modalType: false,
+					onReturnTrue: settings.onReturnTrue,
+					onReturnFalse: settings.onReturnFalse
+				});
+			}
+			else{
+				alert("Please set \"onReturnTrue\" function.");
+			}
+		}
+	});
+
+	/* Button Confirm Link */
+	$("a.confirmLink, *[data-confirmLink=1]").each(function(){
+		$(this).off("click").click(function(){
+			return $(this).modalConfirmLink({
+				url: $(this).attr('data-url'),
+				title: '<i class="fa fa-fw fa-warning"></i> Link Confirmation',
+				message: $(this).attr('data-message')
+			});
+		});
+	});
+
+	/* Button Confirm Submit */
+	$(".confirmSubmit, *[data-confirmSubmit=1]").each(function(){
+		$(this).off('click').click(function(){
+			return $(this).modalConfirmSubmit({
+				title: '<i class="fa fa-fw fa-warning"></i> Form Submit Confirmation',
+				message: $(this).attr('data-message'),
+				$form: $(this).closest('form')
+			});
+		});
+	});
+});
+
+
+var _modal = {
+	alert: function( message, title, params ){
+		return $(null).modalAlert( jQuery.extend(true, {
+			title: title,
+			message: message,
+			modalType: false
+		}, params) );
+	}
+};

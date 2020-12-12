@@ -16,7 +16,7 @@ class InfoKegController extends Controller
     public function index()
     {
         $infokeg = Infokeg::all();
-        return view('infokeg/infokeg', ['infokeg' => $infokeg]);
+        return view('/admin/infokeg/infokeg', ['infokeg' => $infokeg]);
     }
 
     /**
@@ -26,7 +26,7 @@ class InfoKegController extends Controller
      */
     public function tambah()
     {
-        return view('infokeg/infokeg_tambah');
+        return view('/admin/infokeg/infokeg_tambah');
     }
 
     /**
@@ -87,7 +87,7 @@ class InfoKegController extends Controller
     public function edit($id)
     {
         $infokeg = Infokeg::where('id', $id)->first();
-        return view('infokeg/infokeg_edit', ['infokeg' => $infokeg]);
+        return view('/admin/infokeg/infokeg_edit', ['infokeg' => $infokeg]);
     }
 
     /**
@@ -99,22 +99,22 @@ class InfoKegController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $this->validate($request,[
-            'nama_kegiatan' => 'required',
-            'deskripsi' => 'required',
-            'tanggal_kegiatan' => 'required',
-            'tempat_kegiatan' => 'required',
-            'foto_kegiatan' => 'required'
-        ]);
+       $this->validate($request,[
+        'nama_kegiatan' => 'required',
+        'deskripsi' => 'required',
+        'tanggal_kegiatan' => 'required',
+        'tempat_kegiatan' => 'required',
+        'foto_kegiatan' => 'required'
+    ]);
 
-        $infokeg = Infokeg::where('id', $id)->first();
-        $image = json_decode($infokeg->foto_kegiatan);
-        $length = count($image);
-        for ($i = 0; $i < $length; $i++) {
-         unlink(public_path("data_file/".$image[$i]));
-     }
+       $infokeg = Infokeg::where('id', $id)->first();
+       $image = json_decode($infokeg->foto_kegiatan);
+       $length = count($image);
+       for ($i = 0; $i < $length; $i++) {
+           unlink(public_path("data_file/".$image[$i]));
+       }
 
-     foreach ($request->file('foto_kegiatan') as $image) {
+       foreach ($request->file('foto_kegiatan') as $image) {
         $namafile = $image->getClientOriginalName();
         $namaasli = pathinfo($namafile, PATHINFO_FILENAME);
         $ekstensi = $image->getClientOriginalExtension();
@@ -141,13 +141,30 @@ class InfoKegController extends Controller
      */
     public function destroy($id)
     {
-     $infokeg = Infokeg::where('id', $id)->first();
-     $image = json_decode($infokeg->foto_kegiatan);
-     $length = count($image);
-     for ($i = 0; $i < $length; $i++) {
-         unlink(public_path("data_file/".$image[$i]));
-     }
-     $infokeg->delete();
-     return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
- }
+       $infokeg = Infokeg::where('id', $id)->first();
+       $image = json_decode($infokeg->foto_kegiatan);
+       $length = count($image);
+       for ($i = 0; $i < $length; $i++) {
+           unlink(public_path("data_file/".$image[$i]));
+       }
+       $infokeg->delete();
+       return redirect('infokeg')->with('msg', 'Data Telah Terhapus');
+   }
+   public function search(Request $request)
+   {
+    $cari = $request->search;
+    $caritanggal = $request->datekeg;
+    if (isset($cari)) {
+        $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
+        ->paginate(5);
+    }elseif (isset($caritanggal)) {
+        $infokeg = Infokeg::where('tanggal_kegiatan', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+    }elseif (isset($cari)&&isset($caritanggal)) {
+        $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_kegiatan', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+    }
+    return view('/admin/infokeg/infokeg', ['infokeg' => $infokeg]);
+}
 }

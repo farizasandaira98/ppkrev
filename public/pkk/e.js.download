@@ -1,0 +1,70 @@
+/* 	e.js - e Javascript
+	coded by ErenAlbaKaunang, 2013 */
+
+if( typeof jQuery != 'undefined' ){
+
+(function(){
+	var ini = this;
+
+	ini.ejs = {
+		plugin: {},
+
+		ajax_max_send_request: false,
+
+		getLoader: function()
+		{
+			return $(".ejs_ajax_loader");
+		},
+
+		die: function(status, useHandler){
+			/*
+		    http://kevin.vanzonneveld.net
+		    +   original by: Brett Zamir (http://brettz9.blogspot.com)
+		    +      input by: Paul
+		    +   bugfixed by: Hyam Singer (http://www.impact-computing.com/)
+		    +   improved by: Philip Peterson
+		    +   bugfixed by: Brett Zamir (http://brettz9.blogspot.com)
+		    %        note 1: Should be considered expirimental. Please comment on this function.
+		    *     example 1: exit();
+		    *     returns 1: null
+			*/
+			
+		    var i;
+
+		    if (typeof status === 'string') {
+		        console.error("[EJS Error] "+status);
+		    }
+
+		    /*window.addEventListener('error', function (e) {e.preventDefault();e.stopPropagation();}, false);
+
+		    function stopPropagation (e) {
+		        e.stopPropagation();
+		        e.preventDefault(); // Stop for the form controls, etc., too?
+		    }
+
+		    if( userHandler === true ){
+		    	var handlers = [
+			        'copy', 'cut', 'paste',
+			        'beforeunload', 'blur', 'change', 'click', 'contextmenu', 'dblclick', 'focus', 'keydown', 'keypress', 'keyup', 'mousedown', 'mousemove', 'mouseout', 'mouseover', 'mouseup', 'resize', 'scroll',
+			        'DOMNodeInserted', 'DOMNodeRemoved', 'DOMNodeRemovedFromDocument', 'DOMNodeInsertedIntoDocument', 'DOMAttrModified', 'DOMCharacterDataModified', 'DOMElementNameChanged', 'DOMAttributeNameChanged', 'DOMActivate', 'DOMFocusIn', 'DOMFocusOut', 'online', 'offline', 'textInput',
+			        'abort', 'close', 'dragdrop', 'load', 'paint', 'reset', 'select', 'submit', 'unload'
+			    ];
+
+			    for (i=0; i < handlers.length; i++) {
+			        window.addEventListener(handlers[i], function (e) {stopPropagation(e);}, true);
+			    }
+			}
+
+		    if (window.stop) {
+		        window.stop();
+		    }
+
+		    throw '';*/
+		     if (window.stop) {
+		        window.stop();
+		    }
+		},/*function.die*/
+	};
+})(window);
+
+}

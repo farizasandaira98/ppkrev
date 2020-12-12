@@ -1,0 +1,112 @@
+if( typeof ejs_get_ajax_success == 'undefined' )
+{
+	function ejs_get_ajax_success()
+	{
+		var result,
+			default_ajax_success = 100;
+
+		if( typeof ejs_ajax_success != 'undefined' )
+			result = ejs_ajax_success;
+		else if( typeof ajaxsuccess == 'undefined' ) 
+			result = default_ajax_success;
+
+		return result;
+	}
+}
+
+
+if( typeof ejs_soap_init == 'undefined' )
+{
+	function ejs_soap_init( soap_url )
+	{
+		ejs.soapUrl = soap_url;
+	}
+}
+
+
+if( typeof ejs_soap_request == 'undefined' )
+{
+	function ejs_soap_request( service_name, params, on_success )
+	{
+		ejs.soap({
+			url: ejs.soapUrl,
+		    method: service_name,
+		    data: params,
+
+		    success: function (result) {
+	           if( typeof on_success == 'function' )
+	           		on_success( result );
+		    }
+		});
+	}
+}
+
+
+if( typeof ejs_sessions_checker == 'undefined' )
+{
+	function ejs_sessions_checker( url_to_get_session_status, userOptions )
+	{
+		var options = $.extend({
+			interval: 5
+		}, userOptions),
+
+		thatTime = null,
+
+		do_interval = function()
+		{
+			thatTime = setInterval(function(){
+				do_check();
+			}, options.interval*1000);
+		},
+
+		do_check = function()
+		{
+			ejs.ajax({
+				url: url_to_get_session_status,
+				async: true,
+				preloader: false,
+				success: function( ajaxResult ){
+					if( ajaxResult == '0' )
+						location.reload();
+				},
+
+				error: function( ajaxResult ){
+					clearInterval( thatTime );
+				}
+			});
+		}
+
+		if( url_to_get_session_status !== undefined )
+		{
+			$(window)
+			.off('blurSessionChecker')
+			.on('blurSessionChecker', function(){
+				do_interval();
+			})
+			.off('focusSessionChecker')
+			.on('focusSessionChecker', function(){
+				clearInterval(thatTime);
+
+				do_check();
+			});
+
+			$(window)
+			.on('blur', function(){
+				$(this).trigger('blurSessionChecker');
+			})
+			.on('focus', function(){
+				$(this).trigger('focusSessionChecker');
+			});
+		}
+	}
+}
+
+
+if( typeof ejs_sessions_checker_off == 'undefined' )
+{
+	function ejs_sessions_checker_off()
+	{
+		$(window).off('blurSessionChecker').off('focusSessionChecker');
+	}
+}
+

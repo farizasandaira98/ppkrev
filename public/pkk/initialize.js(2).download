@@ -1,0 +1,179 @@
+$(function(){
+	var defaultOptions = {
+		target: $("*[data-select=1], .use-eplugins-select"),
+		on_ready: function(){},
+		no_results_text: "Tidak ada data yang ditemukan."
+	};
+
+	$.eplugins.select2 = function(settings)
+	{
+		$.extend(true, defaultOptions, settings);
+
+		// defaultOptions.target.on("select2:ready", function(){
+		// 	if( typeof defaultOptions.on_ready == 'function' )
+		// 		defaultOptions.on_ready($(this));
+
+		// }).select2({
+		// 	search_contains: true,
+		// 	no_results_text: defaultOptions.no_results_text
+		// });	
+
+		$params = {};
+		$target = defaultOptions.target;
+
+		if( typeof $target == 'undefined' || typeof $target == 'object' ){
+
+			if( typeof $target == 'object' )
+				$params = $target;
+
+			$target = defaultOptions.target;
+		}
+		
+		$target.each(function(){
+			$(this).parent().find('.select2').remove();
+			
+			if ( $(this).data('select2') ){
+				$(this).select2('destroy');
+			}
+		});
+
+
+		$target.each( function(){
+			var custom_template = false,
+				custom_template_selection = false;
+
+			var that 				= this,
+				url 				= $(this).attr('data-url'),
+				selected 			= $(this).attr('data-selected'),
+				minLength 			= $(this).attr('data-minlength'),
+				template 			= $(this).attr('data-template'),
+				data_require 		= $(this).attr('data-select2_require'),
+				data_require_name 	= $(this).attr('data-select2_require_name'),
+				_template 			= 'select2_template_'+template,
+				_template_selection = _template+'_selection';
+
+			if ($(this).data('select2'))
+				$(this).select2('destroy');
+
+			if( selected != '' && selected != undefined ){
+				var selected_data = JSON.parse(selected);
+
+				if( selected_data.length > 0 )
+					$(this).val(selected_data);
+			}
+
+
+			// Check custom template
+			if( template != '' && eval("typeof " + _template) == 'function' ){
+				custom_template = eval(_template);
+			}
+
+			// Check custom template selection
+			if( template != '' && eval("typeof " + _template_selection) == 'function' ){
+				custom_template_selection = eval(_template_selection);
+			}
+
+			// Data by Ajax Request
+			if( url != '' && url != undefined ){
+				var param_require = '',
+					options = {
+						width: '100%',
+					  	cache: true,
+					    minimumInputLength: minLength == '' ? 2 : minLength,
+					    minimumResultsForSearch: 20,
+					    // theme: "classic",
+					},
+
+					activate = function( this_url )
+					{
+					    options.ajax = {
+					        url: this_url,
+					        type: "POST",
+					        dataType: 'json',
+					        data: function (term) {
+					            return {
+					                phrase	 : term.term
+					            };
+					        },
+					        processResults: function (data, params) {
+					            return {
+					            	results: data
+					            };
+					        }
+					    }
+
+
+						if( typeof custom_template == 'function' ){
+							options.templateResult = custom_template;
+						}
+
+						if( typeof custom_template_selection == 'function' ){
+							options.templateSelection = custom_template_selection;
+						}
+
+						$(that).select2(options);
+					}
+
+				// Check "data_require", data yang akan ikut dikirimkan ketika proses xhr
+			    if( data_require != undefined && data_require != '' ){
+			    	var $object_require = $('*[name='+data_require+']');
+
+			    	$object_require.on('change', function(){
+			    		if( $(this).val() != '' )
+			    		{
+			    			var this_url = '',
+				    			this_param_require = param_require + data_require_name + '=' + $object_require.val();
+
+				    		$(that).prop('disabled', false);
+
+							if( url.match(/[?]/g) )
+								this_url = url + '&' + this_param_require;
+							else
+			    				this_url = url + '?' + this_param_require;
+
+				    		activate( this_url, this_param_require );
+				    	}
+				    	else
+				    	{
+				    		$(that).prop('disabled', true);
+				    	}
+			    	});
+			    }
+
+			    else{
+			    	activate( url );
+			    }
+			}
+
+			// Menggunakan default list data
+			else{
+				var options = {
+					width: '100%',
+				  	cache: true,
+				    minimumInputLength: minLength == undefined || minLength == '' ? null : minLength,
+				    minimumResultsForSearch: 20,
+				    // theme: "classic"
+				};
+
+				if( typeof custom_template == 'function' ){
+					options.templateResult = custom_template;
+				}
+
+				if( typeof custom_template_selection == 'function' ){
+					options.templateSelection = custom_template_selection;
+				}
+
+				$(this).select2( options );
+			}
+		});	
+	}
+
+
+	$.eplugins.select2_destroy = function()
+	{
+		defaultOptions.target.each(function(){
+			if( $(this).data('select2') )
+				$(this).select2('destroy');
+		});
+	}
+});

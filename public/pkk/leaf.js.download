@@ -1,0 +1,140 @@
+/* 	LEA Framework Javascript. 
+	Coded by Eren Alba Kaunang.
+	Hak Cipta 2013 LeaFramework.
+*/
+
+// if( typeof JTheme == 'undefined' || JTheme == undefined ||
+// 	typeof JBase == 'undefined' || JBase == undefined ||
+// 	typeof JLeaf == 'undefined' || JLeaf == undefined){
+// 		console.log('FATAL ERROR: Framework needs JBase, JTheme and JLeaf!');
+// }
+// else{
+	switch( typeof jQuery ){
+		case 'function':
+			var leaf = function(){		
+				var ini = this;
+				
+				ini.redefine = function(param){
+					for(i in param.user){
+						param.defaultOptions[i] = param.user[i];
+					}
+					return(param.defaultOptions);
+				}; // Function Redefine.
+				
+				ini.ajax = function(param){
+					var ajaxResult,
+						option = {
+							method : 'POST',
+							data : 'ajax=1',
+							tipe : 'html',
+							alert : false,
+							url : false,
+						};
+					
+					option = ini.redefine({defaultOptions: option, user: param});
+									 
+					$.ajax({
+						type : option.method,
+						data : option.data,
+						dataType : option.tipe,
+						url : option.url,
+						async : false,
+						timeout : 7000,						
+						error: function(xhr, status, error){
+							var pesan = 'Terjadi error pada Request Ajax : ' + error;
+							if( option.alert === false )
+								alert( pesan );
+							else
+								option.alert.name({	text: option.alert.text == undefined?
+															pesan:
+															option.alert.text + error, 
+													theme: option.alert.theme});					
+						},
+						success: function(data){							
+							ajaxResult = data;
+						}
+					});
+					
+					return(ajaxResult);
+				}; // Function Ajax (+ JSON).
+
+				ini.showPopup = function(param){				
+					var html = 	
+						'<div class="darkWall"></div>'+
+						'<div class="popup"></div>';
+					var closeButton =
+						'<div class="bottomPopup _cboth">'+
+							'<div class="close closePopup">CLOSE</div>'+
+						'</div>';
+								
+					$('body').append(html).keyup(function(event){
+						if(event.keyCode == 27)
+							ini.closePopup();
+					}).find('div.popup').html(param.html);
+					
+					if( param.closeButton === true )
+						$('div.popup').append(closeButton)
+						
+					$('div.closePopup').click(ini.closePopup);
+					
+					if (typeof ini.css != 'function'){
+						alert('Missing utility: Leaf Css();');
+					}
+					else{					
+						ini.css({set: 'WH', object: $('div.popup')});
+										 
+						switch( param.posisi ){
+							case 'tengah':
+								ini.css({set: 'posisiTengah',
+										 object: $('div.popup')});
+								break
+							default: break;							
+						}
+					}
+
+					ini.mouseClick({set: 'disable'});				
+				}; // Function Show Popup.
+				
+				ini.closePopup = function(){
+					var $dw = $('body').find('div.darkWall');
+					var $pop = $('body').find('div.popup');
+					
+					$dw.fadeOut(500);
+					$pop.fadeOut(500);
+					setTimeout(function(){
+						$dw.remove();
+						$pop.remove();
+					}, 1000);
+					
+					ini.mouseClick({set: 'enable'});
+				}; // Function Close Popup.
+				
+				ini.mouseClick = function(param){
+					switch( param.set ){
+						case 'disable':						
+							$(window).mousedown(function(event){
+								document.oncontextmenu=new Function("return false");							
+							});
+							break;
+						case 'enable':
+							$(window).mousedown(function(event){
+								document.oncontextmenu=new Function("return true");
+							});
+							break;
+						default: break;				
+					}
+				}; // Function Mouse Click - Handle Event Click.
+			};
+
+			var LA = Eric = Eren =
+				la = eric = eren =
+				$leaf = $lea = $e = new leaf();
+				
+			break;
+			
+		/* Error jika file jQuery belum di panggil */	
+		default:
+			console.log('FATAL ERROR: Aplikasi membutuhkan Framework jQuery.');
+			break;
+	}//IF JQuery undefined.
+//}//IF JBase&JTheme undefined.

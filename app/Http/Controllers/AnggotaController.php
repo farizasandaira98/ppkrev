@@ -16,7 +16,7 @@ class AnggotaController extends Controller
     public function index()
     {
         $anggota = Anggota::all();
-        return view('anggota/anggota', ['anggota' => $anggota]);
+        return view('/admin/anggota/anggota', ['anggota' => $anggota]);
     }
 
     /**
@@ -26,7 +26,7 @@ class AnggotaController extends Controller
      */
     public function tambah()
     {
-        return view('anggota/anggota_tambah');
+        return view('/admin/anggota/anggota_tambah');
     }
 
     /**
@@ -89,7 +89,7 @@ class AnggotaController extends Controller
     public function edit($id)
     {
         $anggota = Anggota::where('id', $id)->first();
-        return view('anggota/anggota_edit', ['anggota' => $anggota]);
+        return view('/admin/anggota/anggota_edit', ['anggota' => $anggota]);
     }
 
     /**
@@ -145,5 +145,13 @@ class AnggotaController extends Controller
         unlink(public_path("data_file/".$anggota->foto));
         $anggota->delete();
         return redirect('anggota')->with('msg', 'Data Telah Terhapus');
+    }
+
+    public function search(Request $request)
+    {
+        $cari = $request->search;
+        $anggota = Anggota::where('nama_anggota','LIKE','%'.$cari.'%')->orWhere('id_anggota',$cari)->paginate(5);
+        //$anggota = Anggota::all();
+        return view('/admin/anggota/anggota', ['anggota' => $anggota]);
     }
 }

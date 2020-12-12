@@ -1,0 +1,49 @@
+/**
+ * $.eplugins.preloader
+ * ePlugins App Preloader
+ * depends: jQuery
+ *
+ * @lastmodified: Feb,2015
+ * @author: ErenAlbaKaunang
+ */
+$(function(){
+	$.eplugins.preloader = function(tipe, settings){
+		var defaultOptions = {
+			text: "Loading....",
+			$wrapper: $('.CSS3PreLoader'),
+			loaded_time: 1,
+			onComplete: false
+		}
+
+		$.extend(true, defaultOptions, settings);
+
+		if( tipe == "show" ){
+			defaultOptions.$wrapper.addClass("process").removeClass("loaded");
+			defaultOptions.$wrapper.find(".loader_text").text(defaultOptions.text);
+		}
+		else if( tipe == "hide" ){
+			defaultOptions.$wrapper.addClass("loaded").removeClass("process");
+
+			setTimeout(function(){
+
+				if( typeof defaultOptions.onComplete == 'function' ) defaultOptions.onComplete();
+
+			}, (defaultOptions.loaded_time*1000) );
+		}
+
+		else if( tipe == "window.loaded" ){
+			defaultOptions.$wrapper.addClass("loaded");
+		}
+	}
+});
+
+$(document).ready(function(){
+	$(window).load(function(){
+		$(this).waitForImages(function(){
+			setTimeout(function(){
+				$.eplugins.preloader("window.loaded");
+				$(document, window).trigger("ePlugins.apploaded");
+			}, 100);
+		});
+	});	
+});

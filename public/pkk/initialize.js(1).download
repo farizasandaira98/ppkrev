@@ -1,0 +1,20 @@
+$(function(){
+	$.eplugins.chosen = function(settings){
+		var defaultOptions = {
+			target: $("*[data-chosen=1], .use-eplugins-chosen"),
+			on_ready: function(){},
+			no_results_text: "Tidak ada data yang ditemukan."
+		};
+
+		$.extend(true, defaultOptions, settings);
+
+		defaultOptions.target.on("chosen:ready", function(){
+			if( typeof defaultOptions.on_ready == 'function' )
+				defaultOptions.on_ready($(this));
+
+		}).chosen({
+			search_contains: true,
+			no_results_text: defaultOptions.no_results_text
+		});		
+	}
+});

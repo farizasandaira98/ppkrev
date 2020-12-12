@@ -1,0 +1,19 @@
+$(function(){
+	$.eplugins.tooltipster = function(settings){
+		var defaultOptions = {
+			target: $("*[data-tooltipster=1], .use-eplugins-tooltipster")
+		}
+
+		$.extend(true, defaultOptions, settings);
+
+		defaultOptions.target.each(function(){
+			$(this).tooltipster({
+				arrow: false,
+				delay: 0,		
+				timer: 8000,
+				contentAsHTML: true,
+				animation: 'grow',
+			});
+		});
+	}
+});

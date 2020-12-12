@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Admin;
 
+use App\Anggota;
+
+use App\Infokeg;
+
+use App\Pengumuman;
+
 class AdminController extends Controller
 {
     /**
@@ -15,7 +21,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin/adminite');
+        $anggota=Anggota::all()->count('nama_anggota');
+        $infokeg=Infokeg::all()->count('nama_kegiatan');
+        $pengumuman=Pengumuman::all()->count('judul_pengumuman');
+        //dd($pengumuman);
+        return view('admin/adminite')
+        ->with(compact('anggota'))
+        ->with(compact('infokeg'))
+        ->with(compact('pengumuman'));
     }
 
     /**

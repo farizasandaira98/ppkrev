@@ -1,0 +1,275 @@
+$(document).ready(function(){
+    
+    var $login = $('div[data-name=loginchat]'),
+        $infoofline = $('div[data-name=infoofline]'),
+        $login_info = $login.find('div.login_info'),
+        $form_login = $login.find('form.form_login'),
+        $input_nama = $form_login.find('input[name=nama]'),
+        $input_email = $form_login.find('input[name=email]'),
+        $button_start_chat = $form_login.find('.button_start_chat'),
+
+        $chatbox = $('div[data-name=chatbox]'),
+        $headerbox = $('div[data-name=headerchat]'),
+        
+        $chat_with_user = $chatbox.find('div.user_online'),
+
+        $form_msg = $chatbox.find('form.form_kirim'),
+        $input_msg = $form_msg.find('input.form_chat'),
+
+        $recent_chat = $chatbox.find('ul.chat_rom');
+
+    var setiap = 25,
+        load_session = function(){
+
+            ejs.ajax({
+                async: true,
+                preloader: false,
+                url: baseurl+'api_chat_new/',
+                method: 'GET',
+                data: 'f=session',
+                maxResendRequest: 0,
+
+                success: function(result){
+
+                    console.log(result);
+                    if (result=='logged') {
+                        $chatbox.removeClass('hide').show();
+                        $login.addClass('hide').hide();
+                    }
+                    else {
+                        $login.removeClass('hide').show();
+                        $chatbox.addClass('hide').hide();
+                    }
+                }
+            });
+        },
+
+        load_operator = function(){
+
+            ejs.ajax({
+                async: true,
+                preloader: false,
+                url: baseurl+'api_chat_new/',
+                method: 'GET',
+                data: 'f=load_operator',
+                dataType: 'json',
+                /*maxResendRequest: 0,*/
+                
+                success: function(result){
+                    
+                    if(result.length > 0){
+
+                        $infoofline.addClass('hide').hide();
+                        
+                        load_session();
+
+                        $chat_with_user.html('');
+
+                        for(var i in result){
+
+                            $chat_with_user.append('<button class="chtbtn" data-attr="'+result[i].user_username+'">'+result[i].user_username+'</button><br /><br />')
+                            
+                            $chat_with_user.find('button[data-attr='+result[i].user_username+']').off('click').on('click', function(){
+                            
+                                handle_chat_with_user_click( $(this).attr('data-attr') );
+                            
+                            });
+                        
+                        }
+                    }
+
+                    else{
+                        
+                        $login.addClass('hide').hide();
+                        $chatbox.addClass('hide').hide();
+                        $infoofline.removeClass('hide').show();
+
+                        ejs.ajax({
+                            async: true,
+                            preloader: false,
+                            url: baseurl+'api_chat_new/',
+                            method: 'GET',
+                            data: 'f=clear',
+                         });
+                        
+                    }
+                }
+            });
+        },
+
+        load_notification = function(){
+            
+            $('div.notification').html('');
+
+            ejs.ajax({
+                async: true,
+                preloader: false,
+                url: baseurl+'api_chat_new/',
+                method: 'GET',
+                data: 'f=load_notification',
+                maxResendRequest: 0,
+                dataType: 'json',
+                
+                success: function(result){
+                    if (result.notifikasi=="ya") {
+
+                        if ($headerbox.hasClass('brown-dark')) {
+
+                            $headerbox.html(result.usr);
+
+                            load_recent_chat();
+
+                            $('<audio autoplay><source src="'+baseurl+'api_chat_new/sound.ogg" type="audio/ogg"></audio>').append('div.notification');                            
+                        };
+                        
+                        $headerbox.removeClass('brown-dark').addClass('lawn');
+                    
+                    };
+                }
+            });
+
+        },
+
+        load_recent_chat = function(){
+
+            ejs.ajax({
+                async: true,
+                preloader: false,
+                url: baseurl+'api_chat_new/',
+                method: 'GET',
+                data: 'f=load_recent_chat',
+                // data: 'operator='+operator,
+                dataType: 'json',
+                maxResendRequest: 0,
+                
+                success: function(result){
+
+                    $recent_chat.html('');
+
+                    for(var i in result){
+
+                        var style = 'bubble';
+
+                        if( result[i].posisi == 'kanan' ){
+                            style = 'bubble bubble--alt';
+                        }
+                        $recent_chat.append('<li class="text '+style+'">'+result[i].pesan+'</li>');
+                        $('.text', $recent_chat).emoticonize();
+                    }
+
+                }
+            });
+        },
+
+        handle_chat_with_user_click = function( data ){
+
+            ejs.ajax({
+                async: true,
+                url: baseurl+'api_chat_new/?f=select_chat',
+                method: 'POST',
+                data: 'usr='+ data,
+                maxResendRequest: 0,
+                
+                success: function(result){
+                    
+                    if (result == 'tidak') {
+                    
+                        $headerbox.html('Saat ini '+data+' sedang ofline');
+                    
+                    }
+
+                    else {
+
+                        $headerbox.html(data);   
+                        load_recent_chat();
+                    
+                    };
+
+                }
+            }); 
+        };
+
+
+
+
+    /*untuk login*/
+    $button_start_chat.off('click').on('click', function(){
+
+        if ($input_nama.val() == '') {
+            $login_info.html('Anda harus mendaftarkan nama anda terlebih dahulu !');
+        }
+
+        else if ($input_email.val() == '') {
+            $login_info.html('Silahkan mengisi alamat email anda !');
+        }
+
+        else {
+            ejs.ajax({
+                async: true,
+                preloader: false,
+                url: baseurl+'api_chat_new/?f=login',
+                data: 'nama='+$input_nama.val()+'&email='+$input_email.val(),
+                method: 'POST',
+                success: function(result){
+                    $chatbox.removeClass('hide').show();
+                    $login.addClass('hide').hide();
+                }
+            });
+        }
+    }); 
+    /*end login*/
+
+    /*send msg*/
+    $form_msg.off('submit').on('submit' , function(){
+        ejs.ajax({
+            async: true,
+            preloader: false,
+            url: baseurl+'api_chat_new/?f=send_msg',
+            method: 'POST',
+            data: 'pesan='+$input_msg.val(),
+            dataType: 'json',
+            maxResendRequest: 0,
+            
+            success: function(result){
+                if (result.uniq == 'unselect') {
+                    $headerbox.html('Anda harus memilih operator untuk lawan chatting'); 
+                
+                }
+
+                else {
+
+                    var msg = $input_msg.val();
+                    
+                    $input_msg.val('');
+                    
+                    $recent_chat.append('<li class="text bubble">'+msg+'</li>').animate({scrollTop:$recent_chat[0].scrollHeight});
+                    
+                    $('.text', $recent_chat).emoticonize();
+
+                    $headerbox.removeClass('lawn').addClass('brown-dark');
+                
+                }
+            }
+        });  
+
+    });
+    /*end send msg*/
+
+
+
+
+    setInterval(function(){
+
+        load_operator();
+        /*load_session();*/
+        load_notification();
+        load_recent_chat();    
+    }, (setiap*1000));
+
+    $login_info.html('Daftarkan nama dan email anda untuk memulai percakapan dengan kami.');
+    
+    load_operator();
+    /*load_session();*/
+    load_notification();
+    load_recent_chat();
+});

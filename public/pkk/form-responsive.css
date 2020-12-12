@@ -1,0 +1,61 @@
+div.result{
+	width: 100%;
+	display: none;
+	cursor: pointer;
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	color: white;
+	font-size: 14px;
+	z-index: 8000;
+	text-align: center;
+	
+	box-shadow: 0 0 6px #424242;
+	-moz-box-shadow: 0 0 6px #424242;
+	-webkit-box-shadow: 0 0 6px #424242;
+}
+div.result img{	
+	vertical-align: middle;
+	margin:0 5px 0 0;
+	width: 18px;
+	height: 18px;
+}
+div.result span.error{
+	font-weight: bold;
+}
+div.auth{
+	background: #2D2D2D;
+	border: solid 1px #000;
+}
+div.success, div.failed{
+	border: none;
+}
+div.success{
+	background: #F9EF31;
+	border-bottom: solid 1px #EFAB4E;
+	color: #424242;
+	/*font-weight: bold;*/
+}
+div.failed{
+	background: #EA2A2A;
+	border-bottom: solid 1px #B20505;
+	color: #F2F2F2;
+	/*font-weight: bold;*/	
+}
+div.result.resulthitam.failed{
+	background: #000; /*hitam*/
+	color: white; /*putih*/
+}
+div.sessionresult{
+	
+}
+
+/**
+* kalo screen width > 768px (desktop / tablet)
+*/
+@media (min-width:768px){
+	div.sessionresult{
+		
+	}
+}

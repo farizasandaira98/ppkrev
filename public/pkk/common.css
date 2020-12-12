@@ -1,0 +1,12 @@
+input[type=text].readonly,
+input[type=radio].readonly,
+input[type=checkbox].readonly,
+select.readonly,
+textarea.readonly{
+	background: #CCC;
+	border: solid 1px #898989;
+}
+
+.ejsFormOnError{
+	border: solid 1px red !important;
+}

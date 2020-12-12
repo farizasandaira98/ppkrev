@@ -1,0 +1,75 @@
+$(function(){
+	/**
+	 * [ Normal Mode ]
+	 * cukup tambah attribut data-datepicker=1
+	 *
+	 * [ Range Mode ]
+	 * terdiri dari dua object, kedua tidak boleh menggunakan attribut data-datepicker=1
+	 * harus menggunakan class ".datepicker-range" dan 
+	 * ditambahi data-start=1(untuk start date), data-end=1(untuk end date)
+	 *
+	 * @author ErenAlbaKaunang
+	 * @lastupdated Mar, 2015
+	 */
+	$.eplugins.datepicker = {
+		init: function(settings){
+			var date = new Date(),
+				currentYear = date.getFullYear(),
+
+			defaultOptions = {
+				target: $("*[data-datepicker=1], .use-eplugins-datepicker"),
+				target_start: $(".datepicker-range[data-start=1]"),
+				target_end: $(".datepicker-range[data-end=1]"),
+
+				on_ready: function(){},
+				no_results_text: "Tidak ada data yang ditemukan.",
+				year: {
+					start: currentYear,
+					end: currentYear
+				},
+				format: "dd-mm-yy"
+			};
+
+			$.extend(true, defaultOptions, settings);
+
+		 	defaultOptions.target.each(function(){
+		 		$(this).attr("readonly");
+		 		$(this).removeClass('hasDatepicker');
+				$(this).datepicker().datepicker('option', {
+					yearRange: defaultOptions.year.start + ':' + defaultOptions.year.end,
+					dateFormat: defaultOptions.format
+				});
+		 	});
+
+		 	/*
+		 	 | Handle jika menggunakan dateStart dateEnd
+		 	 */
+		 	if( typeof $.datepicker != 'undefined' ){
+			 	defaultOptions.target_start.attr("readonly","readonly").datepicker({
+					yearRange: defaultOptions.year.start + ':' + defaultOptions.year.end,
+					dateFormat: defaultOptions.format,
+					onClose: function( selectedDate ) {
+						defaultOptions.target_end.datepicker( "option", "minDate", selectedDate );
+					}
+				});
+				/*.datepicker('widget').wrap('<div class="ll-skin-melon	"/>');*/
+			}
+
+			if( typeof $.datepicker != 'undefined' ){
+				defaultOptions.target_end.attr("readonly","readonly").datepicker({
+					yearRange: defaultOptions.year.start + ':' + defaultOptions.year.end,
+					dateFormat: defaultOptions.format,
+					onClose: function( selectedDate ) {
+						defaultOptions.target_start.datepicker( "option", "maxDate", selectedDate );
+					}
+				});
+			}
+		},
+
+		revalue: function(date){
+			var value = date.split('-');
+				value = value[0]+'/'+value[1]+'/'+value[2];
+				return(value);
+		}
+	}
+});

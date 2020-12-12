@@ -1,0 +1,40 @@
+/*
+ | ePlugins initialize
+ */
+$(function(){ $.extend({ eplugins:{} }) });
+
+
+$(window).load(function(){
+	$("body").addClass("eplugins-scope");
+
+	/*
+	 | Activate jQuery Chosen
+	 */
+	if( typeof $.eplugins.chosen != 'undefined' ){
+		$.eplugins.chosen();
+	}
+
+
+	/*
+	 | Activate jQuery Select2
+	 */
+	if( typeof $.eplugins.select2 != 'undefined' ){
+		$.eplugins.select2();
+	}
+
+
+	/*
+	 | Activate jQuery Tooltipster
+	 */
+	if( typeof $.eplugins.tooltipster != 'undefined' ){ 
+		$.eplugins.tooltipster();
+	}
+
+
+	/*
+	 | Usually Datepicker Used
+ 	 */
+ 	if( typeof $.eplugins.datepicker != 'undefined' ){
+ 		$.eplugins.datepicker.init();
+ 	}
+});

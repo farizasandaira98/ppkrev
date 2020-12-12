@@ -1,0 +1,146 @@
+if( typeof ejs == 'object' )
+{
+	ejs.ajax = function(userOption, iTry)
+	{
+		if( typeof iTry == 'undefined' ){
+			iTry = 0;
+		}
+
+		var result,
+
+		$ejs_ajax_loader = ejs.getLoader(),
+
+		option = {
+			cache: true,
+			method: 'POST',
+			dataType: 'html',
+			maxResendRequest: 1,
+			headers: {},
+			processData: true,
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			async: false,
+			timeout: 15000,
+			success: function(respon){
+				if( respon=='logout' ){
+					window.location.href = jbase;
+				}else{
+					result = respon;
+				}
+			},
+			beforeSend: function(){
+			},
+
+			error :function( jqXhr ) {
+		        if( jqXhr.status === 401 ){
+		        }
+		            
+		        if( jqXhr.status === 422 ){
+		        }
+		    },
+
+			preloader: true,
+			preloader_delay: 0.3
+		}
+
+		for(i in userOption) option[i] = userOption[i];
+
+		if( ejs.ajax_max_send_request !== false ) option.maxResendRequest = ejs.ajax_max_send_request;
+
+		/*
+		 | Show Preloader
+		*/
+		var showLoader = function()
+		{
+			if( option.preloader === true )
+			{
+				if( typeof $.ytLoad == 'function')
+					$.ytLoad();
+
+		  		$ejs_ajax_loader.show();
+		  	}
+		},
+
+		hideLoader = function(){
+			if( option.preloader === true )
+			{
+				if( typeof $.ytLoad == 'function')
+					$.ytLoad('destroy');
+				
+		  		$ejs_ajax_loader.hide();
+		  	}
+		}
+
+		showLoader();
+
+		$.ajax({
+			type: option.method,
+			url: option.url,
+			data: option.data,
+			dataType: option.dataType,
+			cache: option.cache,
+			async: option.async,
+			timeout: option.timeout,
+			processData: option.processData,
+			contentType: option.contentType,
+		 
+			success: function(respon){
+				option.success(respon);
+				
+				setTimeout(function(){
+					hideLoader();
+				}, (option.preloader_delay*1000));
+			},
+		  	error: function(r){
+		  		if( iTry < option.maxResendRequest ){
+					ejs.ajax(userOption, (iTry+1));
+				}
+				else{
+
+					if( option.error( r ) === false )
+					{
+						return false;
+					}
+
+					if( option.dataType == 'json' ){
+
+						hideLoader();
+						
+						if( typeof jQuery().modal == 'function' &&
+							typeof jQuery().modalAlert == 'function' ){
+
+							var ErrorText = $(r.responseText).find(".error_text").html();
+							if( ErrorText != undefined ){
+								$().modalAlert({
+									message: ErrorText,
+									title: "AJAX ERROR"
+								});
+							}
+						}
+
+						var win = window.open();
+						win.document.body.innerHTML = r.responseText;
+						// var win = window.open("javascript:void(0)", false, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=900, height=900");
+					}
+					else{
+						ejs.die('Gagal melakukan request Ajax.', true);
+						location.reload();
+					}
+				}
+		  	},
+		  	beforeSend: function(xhrObj){
+		  		// Set Headers.
+				for( var i in option.headers ){
+					xhrObj.setRequestHeader(i, option.headers[i]);
+				}
+
+		  		if( typeof option.beforeSend == 'function' ) 
+		  			option.beforeSend();
+		  	},
+		});	
+		return(result);
+	}
+}
+else
+{
+	ejs.console('EJS tidak terdefinisi', 'error');
+}

@@ -27,136 +27,188 @@
   <link rel="stylesheet" href="assests/plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+  <div class="wrapper">
 
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <a href="{{ route('logout') }}">Logout</a>  
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+          <div class="info">
+            <p style="color: white">Selamat Datang <br/>Di Halaman Admin <br/>Sistem Monitorng & Reporting<br/>PKK Kecamatan Berbah</p>
+
+          </div>
         </div>
-      </div>
-    </form>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="assests/dist/img/profile.png" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div class="info">
+            <a href="#" class="d-block">{{ Auth::user()->name }}</a>
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-    <a href="{{ route('logout') }}">Logout</a>  
-    </ul>
-  </nav>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        
-        <div class="info">
-          <p style="color: white">Selamat Datang <br/>Di Halaman Admin <br/>Sistem Monitorng & Reporting<br/>PKK Kecamatan Berbah</p>
-          
+          </div>
         </div>
-      </div>
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="assests/dist/img/profile.png" class="img-circle elevation-2" alt="User Image">
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
         </div>
-        <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
-          
-        </div>
-      </div>
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-      </div>
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <a href="/admin" class="nav-link">
-              <p>
-                Home
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/anggota" class="nav-link">
-              <p>
-                Data Anggota
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/infokeg" class="nav-link">
-              <p>
-                Data Kegiatan
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/pengunguman" class="nav-link">
-              <p>
-                Data Pengunguman 
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('register') }}" class="nav-link">
-              <p>
-                Tambah Admin
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a href="/admin" class="nav-link">
+                <p>
+                  Home
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/anggota" class="nav-link">
+                <p>
+                  Data Anggota
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/infokeg" class="nav-link">
+                <p>
+                  Data Kegiatan
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/pengunguman" class="nav-link">
+                <p>
+                  Data Pengunguman 
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('register') }}" class="nav-link">
+                <p>
+                  Tambah Admin
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Home</h1>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Home</h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>{{$anggota}}</h3>
+                <p>Jumlah Anggota</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="/anggota" class="small-box-footer">Tampilkan Data Anggota <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>{{$infokeg}}<sup style="font-size: 20px"></sup></h3>
+                <p>Kegiatan</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="/infokeg" class="small-box-footer">Tampilkan Data Kegiatan <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>{{$pengumuman}}</h3>
 
-    
-    <!-- /.content -->
+                <p>Pengumuman</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="/pengumuman" class="small-box-footer">Tampilkan Data Pengumuman <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>65</h3>
+                <p>Visitor Website</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.card -->
+    </section>
+    <!-- right col -->
   </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0-rc
-    </div>
-  </footer>
+  <!-- /.row (main row) -->
+</div>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+  <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+  All rights reserved.
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Version</b> 3.1.0-rc
+  </div>
+</footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 

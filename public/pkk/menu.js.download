@@ -1,0 +1,206 @@
+/**
+* Dropdown Menu Plugin.
+* need:
+*	- LeaFramework.JS
+*	- jQuery Framework
+*	- Twitter Bootstrap v3.1+
+*	- Font Awesome 4.0+
+*
+* @date Juni, 2014
+* @author ErenAlbaKaunang, LeaFramewok.JS
+*/
+
+leaf.prototype.menu = {
+
+	/**
+	* @structure:
+	* <ul class=leafMenu>
+	*	<li>
+	*		<a></a>
+	*
+	*		----- SUB ------
+	*		<ul>
+	*			<li></li>
+	*		</ul>
+	*	</li>
+	* </ul>
+	*/
+	vertical: function(param){
+		var defaultOptions = {
+			event: "click",
+			maxDepth: false,
+			maxBoxHeight: 350,
+
+			breadcrumb: false,
+			autoBoxHeight: false,
+		},
+		Str = {
+			back: 'Back',
+		},
+		className = {
+			dropdownBox: 'leafDropdownBox',
+			dropdownSub: 'leafDropdownSub',
+		},
+		$parent = $('.leafMenu'),
+		$object = {
+			dropdownBox: $parent.find('.'+className.dropdownBox),
+			dropdownSub: $parent.find('.'+className.dropdownSub),
+			trigger: $parent.find('.'+className.trigger)
+		},
+
+		initialize = function(){
+			var utility = {
+				autoBoxHeight: function(requestedHeight){
+					if( requestedHeight > defaultOptions.maxBoxHeight ){
+						requestedHeight = defaultOptions.maxBoxHeight;
+					}
+
+					if( defaultOptions.autoBoxHeight === true ){
+						$('.dropdown-menu').outerHeight(requestedHeight);
+					}
+				},
+			}
+
+			/*$('.dropdown-menu').off("click").on({
+				"click" : function(e) {
+					alert("l");
+					e.stopPropagation();
+				},
+				"contextmenu": function(){
+					alert("r");
+				}
+			});*/
+
+			$parent.each(function(){
+				var $liParent = $(this).children('li');
+
+				/*$liParent.off("click").on("click", function(e){
+					e.stopPropagation();
+				});*/
+
+				$liParent.each(function(){
+					var $aParent = $(this).children('a'),
+						totalChildrenParent = $(this).children('ul').length;
+
+					if( totalChildrenParent > 0 ){
+						$liParent.addClass('dropdown');
+						$aParent.append('<i class="fa fa-fw fa-caret-down"></i>').attr('data-toggle', 'dropdown').addClass('dropdown-toggle');
+
+						$liParent.children('ul').addClass('dropdown-menu').each(function(){
+							$(this).on({
+								"click": function(e){
+									e.stopPropagation();
+								}/*,
+								"contextmenu": function(e){
+									e.stopPropagation();
+								}*/
+							});
+
+							var $liSubParent = $(this).children('li'),
+								$aSubParent = $(this).children('li:not(.'+className.dropdownBox+')').children('a'),
+								totalChildren = $liSubParent.children('ul').length;
+
+							if( totalChildren > 0 ){								
+								$(this).children('.'+className.dropdownBox).remove()
+								//$(this).prepend('<li class="'+className.dropdownBox+'"></li>');
+
+								$liSubParent.children('ul').addClass(className.dropdownSub);
+								$liSubParent.children('.'+className.dropdownSub).removeClass('hide dis-hide vis-hide').hide();
+
+								$aSubParent.each(function(){
+									var depth = 1,
+										breadcrumb = '',
+										$dropdownTarget = $(this).parent().children('ul');
+
+									if( $dropdownTarget.length > 0 ){
+										$(this).append('<i class="fa fa-fw fa-kanan fa-caret-right"></i>');
+
+										$(this).off(defaultOptions.event).on(defaultOptions.event, function(){
+											utility.autoBoxHeight( $dropdownTarget.outerHeight() );
+
+											var isDisplay = function($dropdownTarget, depth){
+													if( $dropdownTarget.length > 0 && 
+														( 	
+															(defaultOptions.maxDepth === false) ||
+															(typeof defaultOptions.maxDepth == 'number' && depth < defaultOptions.maxDepth )
+														)){
+														
+														return true;
+													}
+													else{
+														return false;
+													}
+												},
+
+												handleTriggerClick = function($trigger, depth, breadcrumb){
+													$trigger.each(function(){
+														var $dropdownTarget = $(this).parent().children('ul');
+
+														$dropdownTarget.addClass(className.dropdownSub);
+
+														if( isDisplay($dropdownTarget, depth) ){								
+															$(this).append('<i class="fa fa-fw fa-kanan fa-caret-right"></i>');
+														}
+
+														$(this).parent().parent().children('li.back').remove();
+														$(this).parent().parent().children('li.breadcrumb').remove();
+
+														$(this).parent().parent().prepend('<li class="back"><a href="javascript:void(0);" class="cpointer"><i class="fa fa-fw fa-chevron-left back"></i>'+Str.back+'</a></li>');
+														$(this).parent().parent().prepend('<li class="breadcrumb"><i class="fa fa-fw fa-map-marker hide"></i>'+breadcrumb+'</li>');
+
+														if( isDisplay($dropdownTarget, depth) ) {
+															$(this).off(defaultOptions.event).on(defaultOptions.event, function(e){
+																utility.autoBoxHeight( $(this).parent().parent().outerHeight() );
+
+																$(this).parent().parent().removeClass('absolute').outerHeight(0).addClass('ohidden');
+																	
+																var handleTriggerBackClick = function($trigger){
+																	$trigger.off("click").on("click", function(){
+																		$(this).parent().parent().removeClass('absolute open').hide();
+																		$(this).parent().parent().parent().parent().addClass('absolute open').removeClass('ohidden').css({'height':'auto'});
+
+																		return false;
+																	});
+																}
+																
+																$dropdownTarget.removeClass('hide').addClass('absolute open').show();
+																handleTriggerClick( $dropdownTarget.children('li:not(.back)').children('a'), depth+1, breadcrumb + ' &nbsp;/&nbsp; ' + $(this).text() );
+																handleTriggerBackClick( $dropdownTarget.children('li.back').children('a') );
+
+																return false;
+															}).attr('href', 'javascript:void(0);');
+														}
+														else{
+														}
+													});								
+												}
+											
+											$dropdownTarget.removeClass('hide').addClass('absolute open').show();
+
+											handleTriggerClick( $dropdownTarget.children('li:not(.back)').children('a'), depth, $(this).text() );
+
+											$dropdownTarget.children('li.back').children('a').off(defaultOptions.event).on(defaultOptions.event, function(){
+												$(this).parent().parent().hide().removeClass('absolute open');
+												return false;
+											});
+
+											return false;
+										});
+									}
+								});
+							}
+						});
+					}
+				});
+			});
+		}
+
+		defaultOptions = eren.redefine({defaultOptions: defaultOptions, user: param});
+		initialize();
+
+		$(document).trigger('leaf.onMenuLoaded');
+	}, /*  */
+
+	horizontal: function(){
+	}, /* horizontal */
+}

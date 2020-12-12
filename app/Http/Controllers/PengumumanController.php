@@ -14,7 +14,7 @@ class PengumumanController extends Controller
     public function index()
     {
         $pengumuman = Pengumuman::all();
-        return view('pengumuman/pengumuman', ['pengumuman' => $pengumuman]);
+        return view('/admin/pengumuman/pengumuman', ['pengumuman' => $pengumuman]);
     }
 
     /**
@@ -24,7 +24,7 @@ class PengumumanController extends Controller
      */
     public function tambah()
     {
-     return view('pengumuman/pengumuman_tambah');
+     return view('/admin/pengumuman/pengumuman_tambah');
  }
 
     /**
@@ -83,7 +83,7 @@ class PengumumanController extends Controller
     public function edit($id)
     {
         $pengumuman = Pengumuman::where('id', $id)->first();
-        return view('pengumuman/pengumuman_edit', ['pengumuman' => $pengumuman]);
+        return view('/admin/pengumuman/pengumuman_edit', ['pengumuman' => $pengumuman]);
     }
 
     /**
@@ -144,4 +144,21 @@ class PengumumanController extends Controller
      $pengumuman->delete();
      return redirect('pengumuman')->with('msg', 'Data Telah Terhapus');
  }
+ public function search(Request $request)
+   {
+    $cari = $request->search;
+    $caritanggal = $request->datekeg;
+    if (isset($cari)) {
+        $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
+        ->paginate(5);
+    }elseif (isset($caritanggal)) {
+        $pengumuman = Pengumuman::where('tanggal_pengumuman', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+    }elseif (isset($cari)&&isset($caritanggal)) {
+        $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_pengumuman', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+    }
+    return view('/admin/pengumuman/pengumuman', ['pengumuman' => $pengumuman]);
+}
 }
