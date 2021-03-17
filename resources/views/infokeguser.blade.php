@@ -109,9 +109,9 @@
     <div class="pm-sub-menu-container ohidden">
       <div class="col-lg-5 col-xs-12 logo">
         <div class="fleft">
-          <img src="./pkk/logo.png" style="height: 40px;" class="img-responsive pm-header-logo">
+          <img src="./pkk/logo.png" style="height: 100px;" class="img-responsive pm-header-logo">
         </div>
-        <div class="fleft uppercase" style="padding-top: 7px;">
+        <div class="fleft uppercase" style="padding-top:35px;">
           <b class="cust_name">PKK Kecamatan Berbah</b><br>Kabupaten Sleman<br>Kota Yogyakarta
         </div>
       </div>
@@ -149,14 +149,27 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-10 col-md-10 col-sm-12">
+          <nav class="navbar-collapse collapse" id="pm-main-navigation">
+            <form method="get" action="/cari" enctype="multipart/form-data" class="form-inline">
+              <select class="form-control" id="jenis" 
+              name="jenis" style="width: 200px">
+              <option disabled="disabled" selected="selected">Pilih Jenis Pencarian --></option>
+              <option value="kegiatan">Kegiatan</option>
+              <option value="pengumuman">Pengumuman</option>
+              <input type="text" name="carikata"  class="form-control" placeholder="Masukan kata pencarian..." style="width: 500px" id="carikata">
+              <input type ="date" placeholder="Tanggal Kegiatan" name="tgl" class="form-control datepicker" id="caritanggal">
+              <button class="btn btn-navbar" type="submit" id="tombol">
+                <i class="fas fa-search"></i>
+              </button>
+            </form> 
+          </nav>
           <nav class="navbar-collapse collapse" id="pm-main-navigation"><ul class="sf-menu pm-nav sf-js-enabled">
             <li><a href="index">Home</a></li>
             <li><a href="/infokeguser">Info Kegiatan</a></li>
-            <li><a href="">Pengumuman</a></li>
-            <li><a href="">Daftar Anggota</a></li>
-            <li><a href="">Visi-Misi</a></li>
-            <li><a href="">Struktur Organisasi</a></li>
-            <li><a href="/login">Login Admin</a></li>
+            <li><a href="/pengumumanuser">Pengumuman</a></li>
+            <li><a href="/anggotauser">Daftar Anggota</a></li>
+            <li><a href="/visimisi">Visi-Misi</a></li>
+            
           </ul></nav>
         </div>            
       </div>
@@ -172,47 +185,37 @@
     <div class="slideshow-container">
 
       <!-- Full-width images with number and caption text -->
-      @foreach($infokeg as $inf)
-      <div class="mySlides fade">
-        <div class="numbertext">1 / 3</div>
-        <?php 
-        $decode = json_decode($inf->foto_kegiatan);
-        $foto = array_slice($decode, 0,1);
-        foreach ($foto as $gambar){ ?>
-          <img src="{{asset('/data_file/'.$gambar) }}" style='width:200px; height:300px;'/>
-        <?php } ?>
-        <div class="text">{{$inf->nama_kegiatan}}</div>
+        <div class="mySlides fade">
+          <div class="numbertext">1 / 3</div>
+            <img src="{{asset('/data_file/gambarputih.jpg') }}" style='display: block;
+          margin-left: auto;
+          margin-right: auto; width: 70px; height:70px;'/>
+        </div>
+        <!-- Next and previous buttons -->
       </div>
-      @endforeach
-      <!-- Next and previous buttons -->
-      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-      <a class="next" onclick="plusSlides(1)">&#10095;</a>
-    </div>
-    <br>
+      <br>
 
-    <!-- The dots/circles -->
-    <div style="text-align:center">
-      <span class="dot" onclick="currentSlide(1)"></span>
-      <span class="dot" onclick="currentSlide(2)"></span>
-      <span class="dot" onclick="currentSlide(3)"></span>
-    </div> 
+      <!-- The dots/circles -->
+      <div style="text-align:center">
+        
+      </div> 
 
-    <script>
-      var slideIndex = 0;
-      showSlides();
+      <script>
+        var slideIndex = 0;
+        showSlides();
 
-      function showSlides() {
-        var i;
-        var slides = document.getElementsByClassName("mySlides");
-        for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
+        function showSlides() {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+          }
+          slideIndex++;
+          if (slideIndex > slides.length) {slideIndex = 1}
+            slides[slideIndex-1].style.display = "block";
+          setTimeout(showSlides, 2000); // Change image every 2 seconds
         }
-        slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}
-          slides[slideIndex-1].style.display = "block";
-        setTimeout(showSlides, 2000); // Change image every 2 seconds
-      }
-    </script>
+      </script>
 
     <div class="row nomargin">
 
@@ -230,14 +233,15 @@
             
             <div class="pm-standalone-news-post">
               <?php foreach (json_decode($inf->foto_kegiatan)as $gambar){ ?>
-                <img src="{{asset('/data_file/'.$gambar) }}" style='width:200px; height:300px;'/>
+                <img src="{{asset('/data_file/'.$gambar) }}" style='width:300px; height:300px;'/>
               <?php } ?>
             </div>
             
             <div class="pm-standalone-news-post-excerpt">
-              <p>{{substr($inf->deskripsi,0,50)}}...<a href="/infokeguser/{{$inf->id}}">Baca Selengkapnya</a>
+              <p>{{substr($inf->deskripsi,0,500)}}...<a href="/infokeguser/{{$inf->id}}">Baca Selengkapnya</a>
               </p>
-              <div class="small"></div>
+              <div class="small">
+              </div>
               <br>
 
             </div>
@@ -324,56 +328,6 @@
 
 
         <div class="pm-containerPadding-top-20">
-
-          <div class="pm-widget">
-            <h6 class="uppercase ejs-button green-dark">
-              Pencarian
-            </h6>
-            <div class="pm-sidebar-padding">
-              <form method="get" action="/cari" enctype="multipart/form-data">
-                <select class="form-control" id="jenis" 
-                name="jenis">
-                <option>Pilih Jenis Pencarian --></option>
-                <option value="kegiatan">Kegiatan</option>
-                <option value="pengumuman">Pengumuman</option>
-                <input type="text" name="carikata" class="pm-sidebar-search-field" placeholder="Masukan kata pencarian...">
-
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div class="pm-widget">
-            <h6 class="uppercase ejs-button green-dark">
-              Kalender
-            </h6>
-            <div class="col-lg-12 col-xs-12 fsz15 fwbold" style="padding-bottom: 7px;">
-              Silahkan klik pada tanggal untuk melihat pengumuman atau berita pada tanggal tersebut. 
-            </div>
-            <div class="col-lg-12 col-xs-12 nopadding">
-              <div class="pm-sidebar-padding">
-                <div id="datepicker" class="hasDatepicker">
-                  <form method="get" action="/cari" enctype="multipart/form-data">
-
-                    <input type ="date" placeholder="Tanggal Kegiatan" name="tgl" class="form-control datepicker">
-                    <select class="form-control" id="jenis" 
-                    name="jenis">
-                    <option>Pilih Jenis Pencarian --></option>
-                    <option value="kegiatan">Kegiatan</option>
-                    <option value="pengumuman">Pengumuman</option>
-                  </select>
-                  <div class="input-group-append">
-                    <button class="btn btn-navbar" type="submit">
-                      Cari Tanggal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-search"></i>
-                    </button>
-
-                  </div>
-                </form>
-              </br>
-            </div>
-          </div>
-        </div>
         <!-- agenda --> 
         <div class="pm-widget">
           <h6 class="uppercase ejs-button green-dark">
@@ -391,6 +345,20 @@
             </div>
           </div>
           <div class="pm-widget">
+          <h6 class="uppercase ejs-button green-dark">
+
+            Pengumuman
+          </h6>
+          <div class="pm-sidebar-padding">
+            <ul class="pm-trends-list">
+              @foreach($pengumuman as $inf)
+              <li>
+                <h4>{{$inf->judul_pengumuman}}
+                </li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
           
           <!-- end agenda -->
 
@@ -402,7 +370,7 @@
               Hubungi Kami
             </h6>
             <div class="pm-sidebar-padding">
-              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=muhfariza98@gmail.com&su=Masukan/Kritikan/Saran&body=Contoh : Tolong Perbaruhi Sistemnya&" class="fleft ohidden popover-hover" style="border-radius:10px;margin:5px;" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="&lt;center&gt;admin 2&lt;br/&gt;&lt;small&gt;muhfariza98@gmail.com&lt;/small&gt;&lt;/center&gt;">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kecberbah@slemankab.go.id&su=Masukan/Kritikan/Saran&body=Contoh : Tolong Perbaruhi Sistemnya&" class="fleft ohidden popover-hover" style="border-radius:10px;margin:5px;" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="&lt;center&gt;admin 2&lt;br/&gt;&lt;small&gt;muhfariza98@gmail.com&lt;/small&gt;&lt;/center&gt;">
 
                 <img src="./pkk/email2.png"></a>
 
@@ -444,7 +412,6 @@
 
               </div>
 
-
               <div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
 
                 <h6 class="pm-fat-footer-title"> <span>Kontak</span> Kami</h6>
@@ -453,11 +420,11 @@
                 <ul class="pm-general-icon-list">
                   <li>
 
-                    <p>085397986721</p>
-                  </li>
-                  <li>
-                    <p>Muh Fariza</p>
-                  </li>
+                      <p>(0274)4435301</p>
+                    </li>
+                    <li>
+                      <p>kecberbah@slemankab.go.id</p>
+                    </li>
                   <li>
                     <!--<span class="fa fa-envelope pm-general-icon"></span>-->
                     <p></p>
@@ -514,7 +481,21 @@
       <!-- end chat panel -->
 
     </div>
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script type="text/javascript">
+    $("#jenis").change(function() {
+      if ($(this).val() == "kegiatan" || $(this).val() == "pengumuman") {
+        $('#carikata').show();
+        $('#caritanggal').show();
+        $('#tombol').show();
+      } else {
+        $('#carikata').hide();
+        $('#caritanggal').hide();
+        $('#tombol').hide();
+      }
+    });
+    $("#jenis").trigger("change");
+  </script>
 <script type="text/javascript" src="./pkk/chat_panel.js.download"></script><script type="text/javascript" src="./pkk/chat_user.js.download"></script><!-- Bootstrap core JavaScript
 ================================================== --><script src="./pkk/jquery.viewport.mini.js.download"></script><script src="./pkk/jquery.easing.1.3.js.download"></script><script src="./pkk/modernizr.custom.js.download"></script><script src="./pkk/owl.carousel.js.download"></script><script src="./pkk/main.js.download"></script><script src="./pkk/jquery.tooltip.js.download"></script><script src="./pkk/superfish.js.download"></script><script src="./pkk/hoverIntent.js.download"></script><script src="./pkk/jquery.stellar.js.download"></script><script src="./pkk/theme-color-selector.js.download"></script><script src="./pkk/jquery.PMSlider.js.download"></script><script src="./pkk/jquery.meanmenu.min.js.download"></script><script src="./pkk/jquery.flexslider.js.download"></script><script src="./pkk/jquery.testimonials.js.download"></script><script src="./pkk/jquery.cssemoticons.js.download"></script><script src="./pkk/wow.min.js.download"></script><script src="./pkk/jquery.isotope.min.js.download"></script><script src="./pkk/jquery.prettyPhoto.js.download"></script><script src="./pkk/tinynav.js.download"></script><script src="./pkk/ajax-appointment-form.js.download"></script><script type="text/javascript">
 

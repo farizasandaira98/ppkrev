@@ -13,12 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Route Home
+Route::get('/', 'IndexController@index');
 Route::get('/index', 'IndexController@index');
-Route::get('/infokeguser/{id}','InfokeguserController@readmore');
 
 //Route Di User
 //Route infokeguser
 Route::get('/infokeguser', 'InfokeguserController@index');
+Route::get('/infokeguser/{id}','InfokeguserController@readmore');
+
+//Route pengumuman user
+Route::get('/pengumumanuser', 'pengumumanuserController@index');
+Route::get('/pengumumanuser/{id}','pengumumanuserController@readmore');
+
+//Route Data Anggota Di User
+Route::get('/anggotauser','AnggotauserController@index');
+
+//Route visimisi
+Route::get('/visimisi','VisimisiController@index');
+
 
 //Route Cari Di Index
 Route::get('/cari', 'CariController@cari');
@@ -35,6 +47,7 @@ Route::get('/anggota/edit/{id}', 'AnggotaController@edit');
 Route::post('/anggota/update/{id}', 'AnggotaController@update');
 Route::get('/anggota/hapus/{id}', 'AnggotaController@destroy');
 Route::get('/anggota/cari', 'AnggotaController@search');
+Route::get('/anggota/cetak', 'AnggotaController@cetak_pdf');
 
 //Route infokeg
 Route::get('/infokeg', 'InfokegController@index');
@@ -44,6 +57,7 @@ Route::get('/infokeg/edit/{id}', 'InfokegController@edit');
 Route::post('/infokeg/update/{id}', 'InfokegController@update');
 Route::get('/infokeg/hapus/{id}', 'InfokegController@destroy');
 Route::get('/infokeg/cari', 'InfokegController@search');
+Route::get('/infokeg/cetak', 'InfokegController@cetak_pdf');
 
 
 //Route Pengumuman
@@ -55,6 +69,11 @@ Route::post('/pengumuman/update/{id}', 'PengumumanController@update');
 Route::get('/pengumuman/hapus/{id}', 'PengumumanController@destroy');
 Route::get('/pengumuman/cari', 'PengumumanController@search');
 
+//Route Data Admin
+Route::get('/dataadmin', 'AdminController@dataadmin');
+Route::get('/dataadmin/hapus/{id}', 'AdminController@dataadminhapus');
+Route::get('/dataadmincari', 'AdminController@dataadmincari');
+
 //Route Login
 //Route::get('/', 'AuthController@showFormLogin')->name('login');
 Route::get('login', 'AuthController@showFormLogin')->name('login');
@@ -63,7 +82,6 @@ Route::get('register', 'AuthController@showFormRegister')->name('register');
 Route::post('register', 'AuthController@register');
  
 Route::group(['middleware' => 'auth'], function () {
- 
     Route::get('admin', 'AdminController@index')->name('admin');
     Route::get('logout', 'AuthController@logout')->name('logout');
  

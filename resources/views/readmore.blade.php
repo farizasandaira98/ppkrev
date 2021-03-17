@@ -149,14 +149,27 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-md-10 col-sm-12">
+					<nav class="navbar-collapse collapse" id="pm-main-navigation">
+						<form method="get" action="/cari" enctype="multipart/form-data" class="form-inline">
+							<select class="form-control" id="jenis" 
+							name="jenis" style="width: 200px">
+							<option disabled="disabled" selected="selected">Pilih Jenis Pencarian --></option>
+							<option value="kegiatan">Kegiatan</option>
+							<option value="pengumuman">Pengumuman</option>
+							<input type="text" name="carikata"  class="form-control" placeholder="Masukan kata pencarian..." style="width: 500px" id="carikata">
+							<input type ="date" placeholder="Tanggal Kegiatan" name="tgl" class="form-control datepicker" id="caritanggal">
+							<button class="btn btn-navbar" type="submit" id="tombol">
+								<i class="fas fa-search"></i>
+							</button>
+						</form> 
+					</nav>
 					<nav class="navbar-collapse collapse" id="pm-main-navigation"><ul class="sf-menu pm-nav sf-js-enabled">
 						<li><a href="/index">Home</a></li>
-						<li><a href="">Info Kegiatan</a></li>
-						<li><a href="">Pengumuman</a></li>
-						<li><a href="">Daftar Anggota</a></li>
-						<li><a href="">Visi-Misi</a></li>
-						<li><a href="">Struktur Organisasi</a></li>
-						<li><a href="/login">Login Admin</a></li>
+						<li><a href="/infokeguser">Info Kegiatan</a></li>
+						<li><a href="/pengumumanuser">Pengumuman</a></li>
+						<li><a href="/anggotauser">Daftar Anggota</a></li>
+						<li><a href="/visimisi">Visi-Misi</a></li>
+						
 					</ul></nav>
 				</div>            
 			</div>
@@ -170,31 +183,23 @@
 		</div>
 		<!-- Slideshow container -->
 		<div class="slideshow-container">
+
 			<!-- Full-width images with number and caption text -->
-			@foreach($infokeg2 as $inf2)
 			<div class="mySlides fade">
 				<div class="numbertext">1 / 3</div>
-				<?php 
-				$decode = json_decode($inf2->foto_kegiatan);
-				$foto = array_slice($decode, 0,1);
-				foreach ($foto as $gambar){ ?>
-					<img src="{{asset('/data_file/'.$gambar) }}" style='width:200px; height:300px;'/>
-				<?php } ?>
-				<div class="text">{{$inf2->nama_kegiatan}}</div>
+				<img src="{{asset('/data_file/gambarputih.jpg') }}" style='display: block;
+				margin-left: auto;
+				margin-right: auto; width: 70px; height:70px;'/>
 			</div>
-			@endforeach
 			<!-- Next and previous buttons -->
-			<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-			<a class="next" onclick="plusSlides(1)">&#10095;</a>
 		</div>
 		<br>
 
 		<!-- The dots/circles -->
 		<div style="text-align:center">
-			<span class="dot" onclick="currentSlide(1)"></span>
-			<span class="dot" onclick="currentSlide(2)"></span>
-			<span class="dot" onclick="currentSlide(3)"></span>
+
 		</div> 
+
 		<script>
 			var slideIndex = 0;
 			showSlides();
@@ -208,41 +213,41 @@
 				slideIndex++;
 				if (slideIndex > slides.length) {slideIndex = 1}
 					slides[slideIndex-1].style.display = "block";
-  			setTimeout(showSlides, 2000); // Change image every 2 seconds
-  		}
-  	</script>
+          setTimeout(showSlides, 2000); // Change image every 2 seconds
+      }
+  </script>
 
-  	<div class="row nomargin">
+  <div class="row nomargin">
 
-  		<div class="container middle-container">
-  			<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-  				<h3 class="ejs-button green-dark btn fcwhite noborder-radius tleft col-lg-12 col-xs-12 cdefault">
-  					Kegiatan Terbaru
-  				</h3>
+  	<div class="container middle-container">
+  		<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+  			<h3 class="ejs-button green-dark btn fcwhite noborder-radius tleft col-lg-12 col-xs-12 cdefault">
+  				Kegiatan Terbaru
+  			</h3>
 
-  				<div class="col-lg-12 col-xs-12 nopadding">
-  					
-  					<article class="pm-column-spacing news-post"><h2 class="pm-standalone-news-post-title">
-  						<a href="">{{$infokeg->nama_kegiatan}}</a>  
-  					</h2>
-  					
-  					<div class="pm-standalone-news-post">
-  						<?php foreach (json_decode($infokeg->foto_kegiatan)as $gambar){ ?>
-  							<img src="{{asset('/data_file/'.$gambar) }}" style='width:300px; height:400px;'/>
-  						<?php } ?>
-  					</div>
-  					
-  					<div class="pm-standalone-news-post-excerpt">
-  						<p>{{$infokeg->deskripsi}}
-  						</p>
-  						<div class="small">Tanggal : {{$infokeg->tanggal_kegiatan}}</br>Lokasi : {{$infokeg->tempat_kegiatan}}</div>
-  						<br>
+  			<div class="col-lg-12 col-xs-12 nopadding">
 
-  					</div>
-  					
-  					<br><div class="pm-post-loaded-info news">
+  				<article class="pm-column-spacing news-post"><h2 class="pm-standalone-news-post-title">
+  					<a href="">{{$infokeg->nama_kegiatan}}</a>  
+  				</h2>
+
+  				<div class="pm-standalone-news-post">
+  					<?php foreach (json_decode($infokeg->foto_kegiatan)as $gambar){ ?>
+  					<img src="{{asset('/data_file/'.$gambar) }}" style='width:300px; height:300px;'/>
+  					<?php } ?>
+  				</div>
+
+  				<div class="pm-standalone-news-post-excerpt">
+  					<p>{{$infokeg->deskripsi}}
+  					</p>
+  					<div class="small">Tanggal : {{$infokeg->tanggal_kegiatan}}</br>Lokasi : {{$infokeg->tempat_kegiatan}}</div>
+  					<br>
+
+  				</div>
+
+  				<br><div class="pm-post-loaded-info news">
   				</article>
-  				
+
   			</div>
   		</div>    
 
@@ -298,211 +303,195 @@
   				$hari = date('l');
   				$tgl=date('d-m-Y');
   				if($hari == "Monday"){
-  					$hari = "Senin";
-  				}else if($hari == "Tuesday"){
-  					$hari = "Selasa";
-  				}else if($hari == "Wednesday"){
-  					$hari = "Rabu";
-  				}else if($hari == "Thursday"){
-  					$hari = "Kamis";
-  				}else if($hari == "Friday"){
-  					$hari = "Jum'at";
-  				}else if($hari == "Saturday"){
-  					$hari = "Sabtu";
-  				}else if($hari == "Sunday"){
-  					$hari = "Minggu";
-  				}
-  				echo "Hari : ".$hari."</br> Tanggal : ".$tgl;
-  				?>
-  			</div>
-  		</div>
+  				$hari = "Senin";
+  			}else if($hari == "Tuesday"){
+  			$hari = "Selasa";
+  		}else if($hari == "Wednesday"){
+  		$hari = "Rabu";
+  	}else if($hari == "Thursday"){
+  	$hari = "Kamis";
+  }else if($hari == "Friday"){
+  $hari = "Jum'at";
+}else if($hari == "Saturday"){
+$hari = "Sabtu";
+}else if($hari == "Sunday"){
+$hari = "Minggu";
+}
+echo "Hari : ".$hari."</br> Tanggal : ".$tgl;
+?>
+</div>
+</div>
 
 
-  		<div class="pm-containerPadding-top-20">
+<div class="pm-containerPadding-top-20">
+	<!-- agenda --> 
+	<div class="pm-widget">
+		<h6 class="uppercase ejs-button green-dark">
 
-  			<div class="pm-widget">
-  				<h6 class="uppercase ejs-button green-dark">
-  					Pencarian
-  				</h6>
-  				<div class="pm-sidebar-padding">
-  					<form action="" method="POST" id="formPencarian">
+			Agenda
+		</h6>
+		<div class="pm-sidebar-padding">
+			<ul class="pm-trends-list">
+				@foreach($infokeg2 as $inf)
+				<li>
+					<h4>{{$inf->nama_kegiatan}}
+					</li>
+					@endforeach
+				</ul>
+			</div>
+		</div>
+		<div class="pm-widget">
+			<h6 class="uppercase ejs-button green-dark">
 
-  						<input type="text" name="carikata" class="pm-sidebar-search-field" placeholder="Masukan kata pencarian...">
-
-  						<button class="btn btn-navbar" type="submit">
-  							<i class="fas fa-search"></i>
-  						</button>
-  					</form>
-  				</div>
-  			</div>
-  			<div class="pm-widget">
-  				<h6 class="uppercase ejs-button green-dark">
-  					Kalender
-  				</h6>
-  				<div class="col-lg-12 col-xs-12 fsz15 fwbold" style="padding-bottom: 7px;">
-  					Silahkan klik pada tanggal untuk melihat pengumuman atau berita pada tanggal tersebut. 
-  				</div>
-  				<div class="col-lg-12 col-xs-12 nopadding">
-  					<div class="pm-sidebar-padding">
-  						<div id="datepicker" class="hasDatepicker">
-  							<form method="get" action="/infokeg/cari" enctype="multipart/form-data">
-  								
-  								<input type ="date" placeholder="Tanggal Kegiatan" name="datekeg" class="form-control datepicker">
-  								<select class="form-control" id="jenis_kelamin" 
-  								name="jenis_kelamin">
-  								<option value="#">Pilih Jenis Pencarian --></option>
-  								<option value="kegiatan">Kegiatan</option>
-  								<option value="pengumuman">Pengumuman</option>
-  							</select>
-  							<div class="input-group-append">
-  								<button class="btn btn-navbar" type="submit">
-  									Cari Tanggal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-search"></i>
-  								</button>
-
-  							</div>
-  						</form>
-  					</br>
-  				</div>
-  			</div>
-  		</div>
-  		<!-- agenda --> 
-  		<div class="pm-widget">
-  			<h6 class="uppercase ejs-button green-dark">
-
-  				Agenda
-  			</h6>
-  			<div class="pm-sidebar-padding">
-  				<ul class="pm-trends-list">
-  					
-  						<h4>{{$infokeg->nama_kegiatan}}
-  						</li>
-
-  					</ul>
-  				</div>
-  			</div>
-  			<!-- end agenda -->
+				Pengumuman
+			</h6>
+			<div class="pm-sidebar-padding">
+				<ul class="pm-trends-list">
+					@foreach($pengumuman2 as $inf)
+					<li>
+						<h4>{{$inf->judul_pengumuman}}
+						</li>
+						@endforeach
+					</ul>
+				</div>
+			</div>
+			<!-- end agenda -->
 
 
-  			<!-- statistik pengunjung -->
-  			<!-- statistik onlinesupport -->
-  			<div class="pm-widget">
-  				<h6 class="uppercase ejs-button green-dark">
-  					Hubungi Kami
-  				</h6>
-  				<div class="pm-sidebar-padding">
-  					<a href="https://mail.google.com/mail/?view=cm&fs=1&to=muhfariza98@gmail.com&su=Masukan/Kritikan/Saran&body=Contoh : Tolong Perbaruhi Sistemnya&" class="fleft ohidden popover-hover" style="border-radius:10px;margin:5px;" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="&lt;center&gt;admin 2&lt;br/&gt;&lt;small&gt;muhfariza98@gmail.com&lt;/small&gt;&lt;/center&gt;">
+			<!-- statistik pengunjung -->
+			<!-- statistik onlinesupport -->
+			<div class="pm-widget">
+				<h6 class="uppercase ejs-button green-dark">
+					Hubungi Kami
+				</h6>
+				<div class="pm-sidebar-padding">
+					<a href="https://mail.google.com/mail/?view=cm&fs=1&to=kecberbah@slemankab.go.id&su=Masukan/Kritikan/Saran&body=Contoh : Tolong Perbaruhi Sistemnya&" class="fleft ohidden popover-hover" style="border-radius:10px;margin:5px;" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="&lt;center&gt;admin 2&lt;br/&gt;&lt;small&gt;muhfariza98@gmail.com&lt;/small&gt;&lt;/center&gt;">
 
-  						<img src="{{asset('pkk/email2.png')}}"></a>
+						<img src="{{asset('pkk/email2.png')}}"></a>
 
-  					</div>
-  				</div>
-  				<!-- end statistik onlinesupport -->
+					</div>
+				</div>
+				<!-- end statistik onlinesupport -->
 
 
-  			</div>
-  		</aside>
-  	</div>
+			</div>
+		</aside>
+	</div>
 
-  </div> 
+</div> 
 
 
 
 
-  <div class="pm-fat-footer bg-cover" style="background-image: url(//kependudukan.jogjakota.go.id/publik/application/portal/files/image/setting/bg_info.png);">
+<div class="pm-fat-footer bg-cover" style="background-image: url(//kependudukan.jogjakota.go.id/publik/application/portal/files/image/setting/bg_info.png);">
 
-  	<div class="container">
-  		<div class="row">
+	<div class="container">
+		<div class="row">
 
-  			<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
+			<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
 
-  				<h6 class="pm-fat-footer-title">
-  					<span>Tentang</span> Kami</h6>
-  					<div class="pm-fat-footer-title-divider"></div>
-  					<p>Portal Penyedia Semua Informasi Yang Berkaitan dengan kegiatan PKK Kecamatan Berbah</p>
+				<h6 class="pm-fat-footer-title">
+					<span>Tentang</span> Kami</h6>
+					<div class="pm-fat-footer-title-divider"></div>
+					<p>Portal Penyedia Semua Informasi Yang Berkaitan dengan kegiatan PKK Kecamatan Berbah</p>
 
-  				</div>
+				</div>
 
-  				<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
+				<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
 
-  					<h6 class="pm-fat-footer-title">
-  						<span>Alamat</span></h6>
-  						<div class="pm-fat-footer-title-divider"></div>
+					<h6 class="pm-fat-footer-title">
+						<span>Alamat</span></h6>
+						<div class="pm-fat-footer-title-divider"></div>
 
-  						<p>Desa Tegaltirto, Sanggrahan, Berbah, Tegaltirto, Kec. Berbah, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55573</p>
+						<p>Desa Tegaltirto, Sanggrahan, Berbah, Tegaltirto, Kec. Berbah, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55573</p>
 
-  					</div>
-
-
-  					<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
-
-  						<h6 class="pm-fat-footer-title"> <span>Kontak</span> Kami</h6>
-  						<div class="pm-fat-footer-title-divider"></div>
-
-  						<ul class="pm-general-icon-list">
-  							<li>
-
-  								<p>085397986721</p>
-  							</li>
-  							<li>
-  								<p>Muh Fariza</p>
-  							</li>
-  							<li>
-  								<!--<span class="fa fa-envelope pm-general-icon"></span>-->
-  								<p></p>
-  							</li>
-  							<li>
-  								<!--<span class="fa fa-comments-o pm-general-icon"></span>-->
-  								<p></p>
-  							</li>
-  						</ul>
-  					</div>
-
-  				</div>  
-  			</div>
-
-  		</div>
+					</div>
 
 
+					<div class="col-lg-4 col-md-4 col-sm-12 pm-widget-footer">
 
-  		<footer class="pm-sub-menu-container"><div class="container pm-containerPadding10">
-  			<div class="row col-lg-12 col-md-4 col-sm-12 col-xs-12 pm-center-mobile tcenter" style="padding-bottom: 30px;">
-  				<h5>Copyright © 2020 PKK Kecamatan Berbah</h5>
-  			</div>
-  		</div>
-  	</footer>
-  </div>
+						<h6 class="pm-fat-footer-title"> <span>Kontak</span> Kami</h6>
+						<div class="pm-fat-footer-title-divider"></div>
 
-  <link rel="stylesheet" type="text/css" href="./pkk/style_chat.css">
+						<ul class="pm-general-icon-list">
+							<li>
+
+								<p>(0274)4435301</p>
+							</li>
+							<li>
+								<p>kecberbah@slemankab.go.id</p>
+							</li>
+							<li>
+								<!--<span class="fa fa-envelope pm-general-icon"></span>-->
+								<p></p>
+							</li>
+							<li>
+								<!--<span class="fa fa-comments-o pm-general-icon"></span>-->
+								<p></p>
+							</li>
+						</ul>
+					</div>
+
+				</div>  
+			</div>
+
+		</div>
+
+
+
+		<footer class="pm-sub-menu-container"><div class="container pm-containerPadding10">
+			<div class="row col-lg-12 col-md-4 col-sm-12 col-xs-12 pm-center-mobile tcenter" style="padding-bottom: 30px;">
+				<h5>Copyright © 2020 PKK Kecamatan Berbah</h5>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<link rel="stylesheet" type="text/css" href="./pkk/style_chat.css">
+<script type="text/javascript">
+
+</script><div class="notification"></div>
+
+<div id="fixed">
+
+
+
+
+	<!-- end form -->
+
+	<!-- chat panel area -->
+	<div class="fixedContent hide ohidden" data-name="chatbox" style="height: 0px; display: none;">
+
+		<!-- list user online -->
+		<div class="user_online"><button class="chtbtn" data-attr="data">data</button><br><br></div>
+		<!-- end list user online -->
+
+		<!-- chat rom -->
+		<ul class="chat_rom"></ul>
+		<!-- end chat rom --><!-- input text --><form onsubmit="return false;" class="form_kirim">
+			<input type="text" name="pesan" placeholder="Tulis pesan..." class="form_chat">
+		</form>
+		<!-- end input -->
+
+	</div>
+	<!-- end chat panel -->
+
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
   <script type="text/javascript">
-
-  </script><div class="notification"></div>
-
-  <div id="fixed">
-
-
-
-
-  	<!-- end form -->
-
-  	<!-- chat panel area -->
-  	<div class="fixedContent hide ohidden" data-name="chatbox" style="height: 0px; display: none;">
-
-  		<!-- list user online -->
-  		<div class="user_online"><button class="chtbtn" data-attr="data">data</button><br><br></div>
-  		<!-- end list user online -->
-
-  		<!-- chat rom -->
-  		<ul class="chat_rom"></ul>
-  		<!-- end chat rom --><!-- input text --><form onsubmit="return false;" class="form_kirim">
-  			<input type="text" name="pesan" placeholder="Tulis pesan..." class="form_chat">
-  		</form>
-  		<!-- end input -->
-
-  	</div>
-  	<!-- end chat panel -->
-
-  </div>
-
+    $("#jenis").change(function() {
+      if ($(this).val() == "kegiatan" || $(this).val() == "pengumuman") {
+        $('#carikata').show();
+        $('#caritanggal').show();
+        $('#tombol').show();
+      } else {
+        $('#carikata').hide();
+        $('#caritanggal').hide();
+        $('#tombol').hide();
+      }
+    });
+    $("#jenis").trigger("change");
+  </script>
 <script type="text/javascript" src="./pkk/chat_panel.js.download"></script><script type="text/javascript" src="./pkk/chat_user.js.download"></script><!-- Bootstrap core JavaScript
 ================================================== --><script src="./pkk/jquery.viewport.mini.js.download"></script><script src="./pkk/jquery.easing.1.3.js.download"></script><script src="./pkk/modernizr.custom.js.download"></script><script src="./pkk/owl.carousel.js.download"></script><script src="./pkk/main.js.download"></script><script src="./pkk/jquery.tooltip.js.download"></script><script src="./pkk/superfish.js.download"></script><script src="./pkk/hoverIntent.js.download"></script><script src="./pkk/jquery.stellar.js.download"></script><script src="./pkk/theme-color-selector.js.download"></script><script src="./pkk/jquery.PMSlider.js.download"></script><script src="./pkk/jquery.meanmenu.min.js.download"></script><script src="./pkk/jquery.flexslider.js.download"></script><script src="./pkk/jquery.testimonials.js.download"></script><script src="./pkk/jquery.cssemoticons.js.download"></script><script src="./pkk/wow.min.js.download"></script><script src="./pkk/jquery.isotope.min.js.download"></script><script src="./pkk/jquery.prettyPhoto.js.download"></script><script src="./pkk/tinynav.js.download"></script><script src="./pkk/ajax-appointment-form.js.download"></script><script type="text/javascript">
 

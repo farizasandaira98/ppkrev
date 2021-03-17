@@ -63,23 +63,6 @@ class PengumumanController extends Controller
         return redirect('pengumuman')->with('msg', 'Data Telah Tersimpan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $pengumuman = Pengumuman::where('id', $id)->first();
@@ -147,16 +130,32 @@ class PengumumanController extends Controller
  public function search(Request $request)
    {
     $cari = $request->search;
-    $caritanggal = $request->datekeg;
+    $caritanggal = $request->datepeng;
+    $caritanggalakhir = $request->datepeng2;
     if (isset($cari)) {
         $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
         ->paginate(5);
-    }elseif (isset($caritanggal)) {
-        $pengumuman = Pengumuman::where('tanggal_pengumuman', 'like', '%'.$caritanggal.'%')
+    }elseif (isset($cari)&&isset($caritanggal)&&isset($caritanggalakhir)) {
+        $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_pengumuman', 'between', $caritanggal,'and',$caritanggalakhir)
+        ->paginate(5);
+    }elseif (isset($caritanggal)&&isset($caritanggalakhir)) {
+        $pengumuman = Pengumuman::whereBetween('tanggal_pengumuman', [$caritanggal, $caritanggalakhir])
+        ->paginate(5);
+    }elseif (isset($cari)&&isset($caritanggalakhir)) {
+       $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_pengumuman', 'like', '%'.$caritanggalakhir.'%')
         ->paginate(5);
     }elseif (isset($cari)&&isset($caritanggal)) {
         $pengumuman = Pengumuman::where('judul_pengumuman', 'like', '%'.$cari.'%')
         ->orWhere('tanggal_pengumuman', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+    }elseif (isset($caritanggal)) {
+        $pengumuman = Pengumuman::where('tanggal_pengumuman', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+        //dd($pengumuman);
+    }elseif (isset($caritanggalakhir)) {
+        $pengumuman = Pengumuman::where('tanggal_pengumuman', 'like', '%'.$caritanggalakhir.'%')
         ->paginate(5);
     }
     return view('/admin/pengumuman/pengumuman', ['pengumuman' => $pengumuman]);

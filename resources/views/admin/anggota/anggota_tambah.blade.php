@@ -130,7 +130,7 @@
 
             <div class="form-group">
                 <label>Foto Anggota</label>
-                <input type="file" name="foto" class="form-control">
+                <input type="file" name="foto" accept=".jpg,.png,.jpeg" class="form-control">
 
                 @if($errors->has('foto'))
                 <div class="text-danger">

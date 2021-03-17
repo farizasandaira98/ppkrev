@@ -88,7 +88,7 @@
               </a>
             </li>
             <li class="nav-item">
-            <a href="/anggota" class="nav-link">
+            <a href="/anggota" class="nav-link active">
               <p>
                 Data Anggota
                 <span class="badge badge-info right"></span>
@@ -106,19 +106,19 @@
           <li class="nav-item">
             <a href="/pengumuman" class="nav-link">
               <p>
-                Data Pengunguman 
+               Data Pengumuman 
                 <span class="badge badge-info right"></span>
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('register') }}" class="nav-link">
-              <p>
-                Tambah Admin
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
+              <a href="/dataadmin" class="nav-link">
+                <p>
+                  Tambah Admin
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -180,7 +180,9 @@
                 @endforeach
               </tbody>
             </table>
+            <a href="/anggota/cetak" class="btn btn-primary">Cetak</a>
           </div>
+
         </div>
       </div>
 

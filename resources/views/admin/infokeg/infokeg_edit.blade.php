@@ -36,6 +36,22 @@
           {{ csrf_field() }}
 
           <div class="form-group">
+                        <label>Pilih Hasil Kegiatan</label>
+                        <select class="form-control" id="pengumuman" 
+                        name="pengumuman">
+                        @foreach($pengumuman as $peng)
+                        <option value="{{$peng->id}}">{{$peng->judul_pengumuman}}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('pengumuman'))
+                    <div class="text-danger">
+                        {{ $errors->first('pengumuman')}}
+                    </div>
+                    @endif
+
+                </div>
+
+          <div class="form-group">
             <label>Nama Kegiatan</label>
             <input type="text" name="nama_kegiatan" class="form-control" placeholder="Nama Kegiatan .." value="{{$infokeg->nama_kegiatan}}">
 

@@ -113,7 +113,8 @@
 
 /* Slideshow container */
 .slideshow-container {
-	max-width: 1000px;
+	width: 100%;
+	height: auto;
 	position: relative;
 	margin: auto;
 }
@@ -277,3 +278,5 @@ body {font-family: Verdana, sans-serif;}
 	background: #1abc9c;
 	color: white !important
 }
+
+

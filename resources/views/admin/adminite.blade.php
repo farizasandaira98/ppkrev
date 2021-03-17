@@ -68,7 +68,7 @@
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-              <a href="/admin" class="nav-link">
+              <a href="/admin" class="nav-link active">
                 <p>
                   Home
                   <span class="badge badge-info right"></span>
@@ -92,15 +92,15 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/pengunguman" class="nav-link">
+              <a href="/pengumuman" class="nav-link">
                 <p>
-                  Data Pengunguman 
+                 Data Pengumuman 
                   <span class="badge badge-info right"></span>
                 </p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('register') }}" class="nav-link">
+              <a href="/dataadmin" class="nav-link">
                 <p>
                   Tambah Admin
                   <span class="badge badge-info right"></span>
@@ -172,26 +172,29 @@
               <a href="/pengumuman" class="small-box-footer">Tampilkan Data Pengumuman <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+         <div class="container">
+           <div id="grafik"></div>
+         </div>
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-danger">
+            <!-- <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3></h3>
                 <p>Visitor Website</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
           </div>
-          <!-- ./col -->
-        </div>
-        <!-- /.row -->
+        -->
       </div>
-      <!-- /.card -->
-    </section>
-    <!-- right col -->
-  </div>
-  <!-- /.row (main row) -->
+      <!-- /.row -->
+    </div>
+    <!-- /.card -->
+  </section>
+  <!-- right col -->
+</div>
+<!-- /.row (main row) -->
 </div>
 <!-- /.content -->
 </div>
@@ -213,12 +216,52 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+Highcharts.chart('grafik', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: {!!json_encode($judul)!!}  
+    },
+    
+    xAxis: {
+        categories: {!!json_encode($bulan)!!},
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Grafik Kegiatan'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} Kegiatan</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Jumlah Kegiatan',
+        data: {!!json_encode($jmlkegiatan)!!}
+
+    }]
+});
+</script>
 <script src="assests/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="assests/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
+<script>  $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="assests/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

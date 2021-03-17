@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Infokeg;
 
+use App\Pengumuman;
+
 class InfokeguserController extends Controller
 {
     /**
@@ -15,79 +17,21 @@ class InfokeguserController extends Controller
      */
     public function index()
     {
-        $infokeg = Infokeg::paginate(3);
-        return view('/infokeguser', ['infokeg' => $infokeg]);
+        $infokeg=Infokeg::paginate(3);
+        $pengumuman=Pengumuman::paginate(3);
+        return view('/infokeguser')
+        ->with(compact('infokeg'))
+        ->with(compact('pengumuman'));
     }
 
     public function readmore($id){
         $infokeg2 = Infokeg::paginate(3);
+        $pengumuman2 = Pengumuman::paginate(3);
         $infokeg = Infokeg::where('id', $id)->first();
-        return view('readmore', ['infokeg' => $infokeg], ['infokeg2' => $infokeg2]);
+         return view('readmore')
+        ->with(compact('pengumuman2'))
+        ->with(compact('infokeg2'))
+        ->with(compact('infokeg'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

@@ -49,6 +49,7 @@
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary btn-block">Register</button>
+                     <a href="/admin" class="btn btn-danger btn-block">Go Back</a>
                 </div>
                 </form>
             </div>

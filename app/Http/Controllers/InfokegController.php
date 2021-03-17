@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Infokeg;
+use App\Pengumuman;
 use Illuminate\Support\Facades\File;
+use PDF;
 
 class InfoKegController extends Controller
 {
@@ -26,7 +28,9 @@ class InfoKegController extends Controller
      */
     public function tambah()
     {
-        return view('/admin/infokeg/infokeg_tambah');
+        $pengumuman = Pengumuman::all();
+        return view('/admin/infokeg/infokeg_tambah')
+        ->with(compact('pengumuman'));
     }
 
     /**
@@ -42,7 +46,8 @@ class InfoKegController extends Controller
             'deskripsi' => 'required',
             'tanggal_kegiatan' => 'required',
             'tempat_kegiatan' => 'required',
-            'foto_kegiatan' => 'required'
+            'foto_kegiatan' => 'required',
+            'pengumuman' => 'required'
         ]);
 
         foreach ($request->file('foto_kegiatan') as $image) {
@@ -62,7 +67,9 @@ class InfoKegController extends Controller
             'deskripsi' => $request->deskripsi,
             'tanggal_kegiatan' => $request->tanggal_kegiatan,
             'tempat_kegiatan' => $request->tempat_kegiatan,
-            'foto_kegiatan' => $namafoto = json_encode($data)
+            'foto_kegiatan' => $namafoto = json_encode($data),
+            'id_pengumuman' => $request->pengumuman
+            
         ]);
         return redirect('infokeg')->with('msg', 'Data Telah Tersimpan');
     }
@@ -73,21 +80,13 @@ class InfoKegController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
+        $pengumuman = Pengumuman::all();
         $infokeg = Infokeg::where('id', $id)->first();
-        return view('/admin/infokeg/infokeg_edit', ['infokeg' => $infokeg]);
+        return view('/admin/infokeg/infokeg_edit', ['infokeg' => $infokeg])
+        ->with(compact('pengumuman'));
     }
 
     /**
@@ -104,7 +103,8 @@ class InfoKegController extends Controller
         'deskripsi' => 'required',
         'tanggal_kegiatan' => 'required',
         'tempat_kegiatan' => 'required',
-        'foto_kegiatan' => 'required'
+        'foto_kegiatan' => 'required',
+        'pengumuman' => 'required'
     ]);
 
        $infokeg = Infokeg::where('id', $id)->first();
@@ -129,6 +129,7 @@ class InfoKegController extends Controller
     $infokeg->tanggal_kegiatan = $request->tanggal_kegiatan;
     $infokeg->tempat_kegiatan = $request->tempat_kegiatan;
     $infokeg->foto_kegiatan = $namafoto = json_encode($data);
+    $infokeg->id_pengumuman = $request->pengumuman;
     $infokeg->save();
     return redirect('infokeg')->with('msg', 'Data Telah Teredit');
 }
@@ -154,17 +155,40 @@ class InfoKegController extends Controller
    {
     $cari = $request->search;
     $caritanggal = $request->datekeg;
+    $caritanggalakhir = $request->datekeg2;
     if (isset($cari)) {
         $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
         ->paginate(5);
-    }elseif (isset($caritanggal)) {
-        $infokeg = Infokeg::where('tanggal_kegiatan', 'like', '%'.$caritanggal.'%')
+    }elseif (isset($cari)&&isset($caritanggal)&&isset($caritanggalakhir)) {
+        $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_kegiatan', 'between', $caritanggal,'and',$caritanggalakhir)
+        ->paginate(5);
+    }elseif (isset($caritanggal)&&isset($caritanggalakhir)) {
+        $infokeg = Infokeg::whereBetween('tanggal_kegiatan', [$caritanggal, $caritanggalakhir])
+        ->paginate(5);
+    }elseif (isset($cari)&&isset($caritanggalakhir)) {
+       $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
+        ->orWhere('tanggal_kegiatan', 'like', '%'.$caritanggalakhir.'%')
         ->paginate(5);
     }elseif (isset($cari)&&isset($caritanggal)) {
         $infokeg = Infokeg::where('nama_kegiatan', 'like', '%'.$cari.'%')
         ->orWhere('tanggal_kegiatan', 'like', '%'.$caritanggal.'%')
         ->paginate(5);
+    }elseif (isset($caritanggal)) {
+        $infokeg = Infokeg::where('tanggal_kegiatan', 'like', '%'.$caritanggal.'%')
+        ->paginate(5);
+        //dd($infokeg);
+    }elseif (isset($caritanggalakhir)) {
+        $infokeg = Infokeg::where('tanggal_kegiatan', 'like', '%'.$caritanggalakhir.'%')
+        ->paginate(5);
     }
     return view('/admin/infokeg/infokeg', ['infokeg' => $infokeg]);
 }
+
+    public function cetak_pdf()
+    {
+        $infokeg = Infokeg::all();
+        $pdf = PDF::loadview('/admin/infokeg/infokeg_pdf',['infokeg'=>$infokeg]);
+        return $pdf->stream();
+    }
 }

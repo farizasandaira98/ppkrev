@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Anggota;
 
+use PDF;
+
 class AnggotaController extends Controller
 {
     /**
@@ -75,10 +77,6 @@ class AnggotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -153,5 +151,12 @@ class AnggotaController extends Controller
         $anggota = Anggota::where('nama_anggota','LIKE','%'.$cari.'%')->orWhere('id_anggota',$cari)->paginate(5);
         //$anggota = Anggota::all();
         return view('/admin/anggota/anggota', ['anggota' => $anggota]);
+    }
+
+    public function cetak_pdf()
+    {
+        $anggota = Anggota::all();
+        $pdf = PDF::loadview('/admin/anggota/anggota_pdf',['anggota'=>$anggota]);
+        return $pdf->stream();
     }
 }

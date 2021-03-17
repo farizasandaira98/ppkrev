@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
-  <<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>Tambah Data Kegiatan</title>
 
   <script type="text/javascript">
@@ -34,6 +34,22 @@
         <form method="post" action="/infokeg/store" enctype="multipart/form-data">
 
           {{ csrf_field() }}
+
+          <div class="form-group">
+                        <label>Pilih Hasil Kegiatan</label>
+                        <select class="form-control" id="pengumuman" 
+                        name="pengumuman">
+                        @foreach($pengumuman as $peng)
+                        <option value="{{$peng->id}}">{{$peng->judul_pengumuman}}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('pengumuman'))
+                    <div class="text-danger">
+                        {{ $errors->first('pengumuman')}}
+                    </div>
+                    @endif
+
+                </div>
 
           <div class="form-group">
             <label>Nama Kegiatan</label>
@@ -85,14 +101,14 @@
 
           <label>Input Gambar Kegiatan</label>
           <div class="input-group control-group increment" >
-            <input type="file" name="foto_kegiatan[]" class="form-control">
+            <input type="file"  accept=".jpg,.png,.jpeg" name="foto_kegiatan[]" class="form-control">
             <div class="input-group-btn"> 
               <button class="btn btn-success" type="button"><i class="glyphicon glyphicon-plus"></i>Add</button>
             </div>
           </div>
           <div class="clone hide">
             <div class="control-group input-group" style="margin-top:10px">
-              <input type="file" name="foto_kegiatan[]" class="form-control">
+              <input type="file" accept=".jpg,.png,.jpeg" name="foto_kegiatan[]" class="form-control">
               <div class="input-group-btn"> 
                 <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i> Remove</button>
               </div>

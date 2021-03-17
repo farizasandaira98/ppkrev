@@ -37,8 +37,9 @@
       <form class="form-inline ml-3" method="get" action="/pengumuman/cari" enctype="multipart/form-data">
         <div class="input-group input-group-sm">
           <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" name="search">
-          <input type ="date" placeholder="Tanggal Kegiatan" name="datekeg" class="form-control datepicker">
+          <input type placeholder="Masukkan Tanggal Akhir" class="textbox-n" type="text" onfocus="(this.type='date')" id="date" name="datepeng" class="form-control datepicker">
           <div class="input-group-append">
+            <input type placeholder="Masukkan Tanggal Akhir" class="textbox-n" type="text" onfocus="(this.type='date')" id="date" name="datepeng2" class="form-control datepicker">
             <button class="btn btn-navbar" type="submit">
               <i class="fas fa-search"></i>
             </button>
@@ -106,21 +107,21 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/pengumuman" class="nav-link">
+            <a href="/pengumuman" class="nav-link active">
               <p>
-                Data Pengunguman 
+                Data Pengumuman 
                 <span class="badge badge-info right"></span>
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('register') }}" class="nav-link">
-              <p>
-                Tambah Admin
-                <span class="badge badge-info right"></span>
-              </p>
-            </a>
-          </li>
+              <a href="/dataadmin" class="nav-link">
+                <p>
+                  Tambah Admin
+                  <span class="badge badge-info right"></span>
+                </p>
+              </a>
+            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

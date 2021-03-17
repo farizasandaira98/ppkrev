@@ -12,6 +12,12 @@ use App\Infokeg;
 
 use App\Pengumuman;
 
+use App\Visitor;
+
+use App\User;
+
+use DB;   
+
 class AdminController extends Controller
 {
     /**
@@ -24,76 +30,40 @@ class AdminController extends Controller
         $anggota=Anggota::all()->count('nama_anggota');
         $infokeg=Infokeg::all()->count('nama_kegiatan');
         $pengumuman=Pengumuman::all()->count('judul_pengumuman');
-        //dd($pengumuman);
+        $tahun = date('Y');
+        $judul = "Kegiatan Dalam Tahun ".$tahun;
+        $jumlahkegiatan = Infokeg::whereYear('tanggal_kegiatan' ,'=', $tahun)->groupBy(DB::raw('MONTH(tanggal_kegiatan)'))->selectRaw("count(*) as total, tanggal_kegiatan")->get();
+        foreach ($jumlahkegiatan as $total) {
+        $jmlkegiatan[] = $total->total; 
+        $tgl_keg = $total->tanggal_kegiatan;
+        $bulan[] = date("M",strtotime($tgl_keg));
+        }
         return view('admin/adminite')
         ->with(compact('anggota'))
         ->with(compact('infokeg'))
+        ->with(compact('jmlkegiatan'))
+        ->with(compact('bulan'))
+        ->with(compact('judul'))
         ->with(compact('pengumuman'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function dataadmin()
     {
-        //
+    $user = User::all();
+    return view('dataadmin')
+    ->with(compact('user'));    
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function dataadminhapus($id)
     {
-        //
+        $user = User::where('id', $id)->first();
+        $user->delete();
+        return redirect('dataadmin')->with('msg', 'Data Telah Terhapus');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function dataadmincari(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $cari = $request->search;
+        $user = User::where('name','LIKE','%'.$cari.'%')->paginate(5);
+        return view('/dataadmin', ['user' => $user]);
     }
 }
